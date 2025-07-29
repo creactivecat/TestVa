@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guida di Viaggio: Lorca > Caminito / Consuegra</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #334155;
+        }
+        section p {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="flex">
+        <aside id="sidebar" class="bg-slate-800 text-white w-64 fixed top-0 left-0 h-full z-20 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+            <div class="p-5 border-b border-slate-700">
+                <h1 class="text-xl font-bold text-amber-400">VA - T2E</h1>
+                <p class="text-sm text-slate-300">Lorca > Caminito / Consuegra</p>
+            </div>
+            <nav id="main-nav" class="flex-grow overflow-y-auto">
+                <ul></ul>
+            </nav>
+            <div class="p-4 text-xs text-center text-slate-500 border-t border-slate-700">
+                <p>&copy; 2025 - Guida Interattiva</p>
+            </div>
+        </aside>
+
+        <button id="menu-toggle" class="md:hidden fixed top-4 left-4 z-30 bg-white p-2 rounded-md shadow-md">
+            <svg id="menu-open-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+            <svg id="menu-close-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <main id="main-content" class="w-full md:ml-64 p-4 sm:p-6 md:p-10">
+        </main>
+    </div>
+
+    <script>
+        const travelData = {
+            title: "🗺️ VA - T2E: Lorca > Caminito / Consuegra",
+            sections: [
+                { id: 'itinerario', title: 'Itinerario', icon: '👣', intro: 'Questa sezione delinea le due tracce alternative del tuo viaggio: una verso il Caminito del Rey in Andalusia, l\'altra verso i mulini di Consuegra in Castilla-La Mancha. Scegli la tua avventura!' },
+                { id: 'spirituale', title: 'Mi sento San Giacomo', icon: '🛐', intro: 'Un viaggio nella fede attraverso i luoghi simbolo delle due tracce, dalla grandiosa Cattedrale di Granada al cuore spirituale di Caravaca de la Cruz, una delle cinque città sante della cristianità.' },
+                { id: 'storico', title: 'Il prof. Barbero è il mio idolo', icon: '📚', intro: 'Immergiti nella ricca e stratificata storia di questa parte della Spagna, dall\'ultimo baluardo del potere musulmano, l\'Alhambra, all\'iconico paesaggio del Don Chisciotte a Consuegra.' },
+                { id: 'avventura', title: 'Io e Indiana Jones', icon: '🪃', intro: 'Questa sezione è dedicata all\'esplorazione attiva. Affronta il "sentiero più pericoloso del mondo", ora reso sicuro, o scopri le vette più alte della Spagna continentale.' },
+                { id: 'leggende', title: 'Dylan Dog non è nessuno', icon: '🔮', intro: 'L\'anima di questa terra è intrisa di leggende. Storie di amanti sfortunati, di re in esilio e di cavalieri folli che hanno trasformato la letteratura in realtà.' },
+                { id: 'cibo', title: 'Si, Ok, Tutto molto bello, ma che si mangia?', icon: '🍴', intro: 'Un viaggio gastronomico nei sapori dell\'Andalusia. Benvenuto nel regno della tapa, dove il cibo è un rito sociale fatto di piccoli assaggi e grandi sapori.' },
+            ],
+            content: {
+                itinerario: {
+                    routes: [
+                        { day: 'Giorno 5/6/7/8 (Casuale)', title: 'Traccia 1: Lorca → Caminito del Rey', distance: '380 KM', time: '3 Ore 30 Min', route: "Da Lorca, si prende l'autostrada A-91 che si congiunge con la A-92, la spina dorsale dell'Andalusia. L'itinerario ti porterà dritto al cuore del fu Emirato di Granada. Dopo Granada, si prosegue verso Antequera per poi deviare sulle strade di campagna che si snodano tra le montagne fino a El Chorro e al Caminito del Rey.", features: "Questo viaggio è un'immersione nell'Andalusia. Lascerai alle spalle i paesaggi aridi di Murcia per entrare in un territorio dominato da uliveti a perdita d'occhio e dalle cime innevate della Sierra Nevada. L'ultimo tratto verso il Caminito è tortuoso e spettacolare." },
+                        { day: 'Giorno 5/6/7/8 (Casuale)', title: 'Traccia 2: Lorca → Consuegra', distance: '410 KM', time: '3 Ore 45 Min', route: "Da Lorca, il viaggio si dirige verso nord sulla A-30 fino ad Albacete per poi immettersi sulla CM-42, l'Autovía de los Viñedos (l'Autostrada dei Vigneti), che ti condurrà direttamente a Consuegra.", features: "Preparati a un cambio di scenario radicale. Il paesaggio arido di Murcia lascia il posto alla 'meseta', l'altopiano spagnolo. Vedrai un orizzonte infinito e pianure sterminate. È la terra che ha ispirato le avventure di Don Chisciotte." }
+                    ]
+                },
+                spirituale: [
+                    { name: "Granada: Cattedrale dell'Incarnazione", classification: "Punto di interesse Spirituale", description: "Costruita sopra la Grande Moschea di Granada per ordine dei Re Cattolici, questa cattedrale è un'imponente dichiarazione di vittoria e un capolavoro del Rinascimento spagnolo. Un luogo che trasuda potere e storia.", address: "Calle Gran Vía de Colón, 5, 18001 Granada", track: "Tratta Caminito del Rey" },
+                    { name: "Caravaca de la Cruz: Basílica de la Vera Cruz", classification: "Punto di interesse Spirituale e Storico", description: "Una delle cinque città sante del mondo cattolico. Il santuario custodisce la Vera Cruz, un frammento della croce di Cristo la cui apparizione miracolosa nel 1232 portò alla conversione del re musulmano.", address: "Cuesta del Castillo, s/n, 30400 Caravaca de la Cruz, Murcia", track: "Tratta Consuegra" },
+                ],
+                storico: [
+                     { name: "Granada: L'Alhambra", classification: "Storico, Architettonico e Culturale", description: "Non è un semplice palazzo, è una città palatina, l'ultimo baluardo del potere musulmano in Spagna. Un complesso di palazzi, giardini e fortezze che rappresenta l'apice dell'arte Nasride. Un luogo da visitare almeno una volta nella vita.", track: "Tratta Caminito del Rey" },
+                     { name: "Antequera: Dolmen di Menga, Viera e El Romeral", classification: "Storico e Archeologico", description: "Un salto indietro nel tempo di 6.000 anni. Questo sito, patrimonio dell'UNESCO, è uno dei complessi megalitici più importanti d'Europa, costruzioni monumentali che dimostrano una conoscenza astronomica e ingegneristica sbalorditiva per l'epoca.", track: "Tratta Caminito del Rey" },
+                     { name: "Consuegra: I Mulini a Vento e il Castello", classification: "Storico e Culturale", description: "È l'immagine iconica della Spagna. Sulla cresta della collina, dodici mulini a vento del XVI secolo si stagliano contro il cielo, ognuno con un nome legato al 'Don Chisciotte'. Accanto, il castello sorveglia la pianura. Visitare questo luogo al tramonto è un'esperienza indimenticabile.", track: "Tratta Consuegra" }
+                ],
+                avventura: [
+                    { name: "Parco Nazionale della Sierra Nevada", classification: "Avventura Escursionistica e Paesaggistica", description: "A due passi da Granada, si trovano le cime più alte della Spagna continentale. D'inverno è una rinomata stazione sciistica, ma d'estate si trasforma in un paradiso per il trekking, con sentieri che si snodano tra lagune glaciali e panorami mozzafiato.", track: "Tratta Caminito del Rey" },
+                    { name: "Caminito del Rey", classification: "Avventura", description: "Un tempo considerato il sentiero più pericoloso del mondo, oggi è un percorso spettacolare ma sicuro. Una passerella sospesa a 100 metri di altezza sulle pareti verticali di un canyon. Camminare qui è un'esperienza adrenalinica, con viste vertiginose e una sensazione di totale immersione in un paesaggio selvaggio e potente.", track: "Tratta Caminito del Rey" }
+                ],
+                leggende: [
+                    { name: "Granada: La Leggenda della Sedia del Moro", classification: "Leggenda Popolare", description: "Si racconta che l'ultimo re di Granada, Boabdil, dopo la resa, si fermò su una collina e pianse guardando l'Alhambra. Sua madre gli disse: 'Piangi come una donna per ciò che non hai saputo difendere come un uomo'. Quel luogo è oggi conosciuto come 'el Suspiro del Moro'.", track: "Tratta Caminito del Rey" },
+                    { name: "Antequera: La Peña de los Enamorados", classification: "Leggenda Romantica", description: "La leggenda di una principessa mora e un cavaliere cristiano che, di fronte al loro amore impossibile, si gettarono insieme dalla cima di questa montagna dalla forma di un volto umano, scegliendo la morte alla separazione.", track: "Tratta Caminito del Rey" },
+                    { name: "La Mancha: La Leggenda di Don Chisciotte", classification: "Leggenda Letteraria", description: "Si narra che proprio qui, sulla collina di Consuegra, Don Chisciotte scambiò i mulini a vento per giganti, lanciandosi in una delle battaglie più famose della letteratura. La leggenda è così potente che ha plasmato l'identità del luogo.", track: "Tratta Consuegra" },
+                    { name: "Toledo: La Leggenda del Pozzo Amaro", classification: "Leggenda Romantica", description: "La storia di un amore proibito tra un cristiano e una ragazza ebrea, finito in tragedia. Si dice che le lacrime della ragazza resero amara l'acqua del pozzo dove fu gettato il corpo dell'amato, e chiunque beva da lì sentirà per sempre l'amarezza di un amore perduto.", track: "Tratta Consuegra (Fuori Percorso)" }
+                ],
+                cibo: {
+                    intro: 'Benvenuti nel regno della tapa! In Andalusia, il cibo è convivialità, un rito sociale che si celebra tra un bicchiere di vino e un assaggio dopo l\'altro. Questa sezione si concentra sulla gastronomia della tratta verso il Caminito del Rey.',
+                    products: [
+                        { name: "Aceite de Oliva Andaluz", description: "L'Andalusia è il più grande produttore di olio d'oliva al mondo. Qui l'olio non è un condimento, ma un ingrediente fondamentale." },
+                        { name: "Jamón de Trevélez", description: "Prosciutto crudo stagionato all'aria fredda della Sierra Nevada. Un prodotto d'eccellenza dal sapore dolce e delicato." },
+                        { name: "Queso de cabra malagueño", description: "Formaggio di capra tipico della provincia di Malaga, fresco o stagionato, perfetto con un filo di miele locale." }
+                    ],
+                    dishes: [
+                        { name: "Tapas de Granada", description: "A Granada, la tapa non si ordina, arriva gratis con la bevanda. Ogni bar ha le sue specialità: fave con prosciutto, patate 'a lo pobre', melanzane fritte con miele." },
+                        { name: "Piononos de Santa Fe", description: "Un piccolo e soffice rotolo di pan di spagna imbevuto in uno sciroppo e coronato da una crema tostata. Uno tira l'altro." },
+                        { name: "Porra Antequerana", description: "Una zuppa fredda, cugina più densa del gazpacho. A base di pomodoro, pane e olio, servita con uova sode e jamón." }
+                    ]
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContent = document.getElementById('main-content');
+            const mainNav = document.getElementById('main-nav').querySelector('ul');
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menu-toggle');
+            const menuOpenIcon = document.getElementById('menu-open-icon');
+            const menuCloseIcon = document.getElementById('menu-close-icon');
+
+            function render() {
+                // Add Home link
+                mainNav.innerHTML += `
+                    <li>
+                        <a href="porompompom.html" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-700 transition-colors duration-200 border-l-4 border-transparent">
+                            <span class="text-xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                            </span>
+                            <span class="font-semibold">Home</span>
+                        </a>
+                    </li>
+                `;
+
+                travelData.sections.forEach(section => {
+                    mainNav.innerHTML += `
+                        <li>
+                            <a href="#${section.id}" data-nav-id="${section.id}" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-700 transition-colors duration-200 border-l-4 border-transparent">
+                                <span class="text-xl">${section.icon}</span>
+                                <span class="font-semibold">${section.title}</span>
+                            </a>
+                        </li>
+                    `;
+
+                    let sectionContent = '';
+                    switch (section.id) {
+                        case 'itinerario':
+                            sectionContent = `
+                                <div class="space-y-8">
+                                    ${travelData.content.itinerario.routes.map(route => `
+                                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                                            <div class="p-6">
+                                                <div class="flex justify-between items-start mb-2">
+                                                    <h3 class="text-2xl font-bold text-slate-800">${route.title}</h3>
+                                                    <span class="text-sm font-semibold text-amber-600 bg-amber-100 px-3 py-1 rounded-full">${route.day}</span>
+                                                </div>
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2 text-center">
+                                                    <div class="bg-slate-50 p-3 rounded-md"><span class="font-bold">Distanza:</span> ${route.distance}</div>
+                                                    <div class="bg-slate-50 p-3 rounded-md"><span class="font-bold">Tempo:</span> ${route.time}</div>
+                                                </div>
+                                                <div class="space-y-3">
+                                                    <div><h4 class="font-semibold text-slate-700">Percorso:</h4><p class="text-slate-600">${route.route}</p></div>
+                                                    <div><h4 class="font-semibold text-slate-700">Caratteristiche:</h4><p class="text-slate-600">${route.features}</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                            break;
+                        case 'cibo':
+                             sectionContent = `
+                                <div class="space-y-12">
+                                    <div>
+                                        <h3 class="text-3xl font-bold text-slate-800 mb-6">Prodotti e Preparati Locali</h3>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            ${travelData.content.cibo.products.map(item => `
+                                                <div class="bg-white p-4 rounded-lg shadow-md text-center transform hover:-translate-y-1 transition-transform duration-200">
+                                                    <h4 class="font-semibold text-slate-700">${item.name}</h4>
+                                                    <p class="text-sm text-slate-500 mt-1">${item.description}</p>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-3xl font-bold text-slate-800 mb-6">Piatti Tradizionali</h3>
+                                        <div class="space-y-6">
+                                            ${travelData.content.cibo.dishes.map(item => `
+                                                <div class="bg-white p-6 rounded-xl shadow-lg transform hover:shadow-xl transition-shadow duration-200">
+                                                    <h4 class="text-xl font-bold text-slate-800">${item.name}</h4>
+                                                    <p class="mt-2 text-slate-600">${item.description}</p>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            break;
+                        default:
+                            sectionContent = `
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    ${travelData.content[section.id].map(item => `
+                                        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
+                                            <div class="p-6">
+                                                ${item.track ? `<span class="text-xs font-bold ${item.track.includes('Caminito') ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'} px-2 py-1 rounded-full mb-2 inline-block">${item.track}</span>` : ''}
+                                                <div class="uppercase tracking-wide text-sm text-amber-600 font-semibold">${item.classification}</div>
+                                                <h3 class="block mt-1 text-lg leading-tight font-bold text-slate-800">${item.name}</h3>
+                                                <p class="mt-2 text-slate-600">${item.description}</p>
+                                                ${item.address ? `<p class="mt-3 text-xs text-slate-500 flex items-center gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                                    ${item.address}</p>` : ''}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                            break;
+                    }
+                    
+                    mainContent.innerHTML += `
+                        <section id="${section.id}" class="py-8">
+                            <div class="max-w-5xl mx-auto">
+                                <div class="flex items-center gap-4 mb-2">
+                                    <div class="text-3xl bg-amber-100 p-3 rounded-full">${section.icon}</div>
+                                    <h2 class="text-4xl font-bold text-slate-800">${section.title}</h2>
+                                </div>
+                                <p class="text-lg text-slate-600 mb-6">${section.intro}</p>
+                                ${sectionContent}
+                            </div>
+                        </section>
+                    `;
+                });
+            }
+
+            function handleScroll() {
+                const sections = document.querySelectorAll('section');
+                const navLinks = document.querySelectorAll('#main-nav a');
+                let currentSectionId = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 100) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('bg-slate-700', 'border-amber-400', 'text-white');
+                    link.classList.add('border-transparent');
+                    if (link.dataset.navId === currentSectionId) {
+                        link.classList.add('bg-slate-700', 'border-amber-400', 'text-white');
+                        link.classList.remove('border-transparent');
+                    }
+                });
+            }
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('-translate-x-full');
+                menuOpenIcon.classList.toggle('hidden');
+                menuCloseIcon.classList.toggle('hidden');
+            }
+
+            render();
+            window.addEventListener('scroll', handleScroll);
+            menuToggle.addEventListener('click', toggleSidebar);
+            
+            document.querySelectorAll('#main-nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768) {
+                       toggleSidebar();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

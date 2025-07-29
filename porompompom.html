@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VA Iberica 2025</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header {
+      background-color: #003366;
+      color: white;
+      padding: 40px 0;
+      text-align: center;
+      width: 100%;
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+    .cards-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 40px;
+      margin: 60px auto;
+      max-width: 1000px;
+      width: 100%;
+      padding: 0 20px;
+    }
+    .card {
+      position: relative;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover,
+    .card:focus-within {
+      transform: scale(1.03);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+    .card.cat {
+      grid-column: span 2;
+      padding-bottom: 80px;
+    }
+    .flags {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    .icon-top-right {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.6rem;
+      color: #ff9800;
+      transition: transform 0.3s ease;
+    }
+    .card.cat:hover .icon-top-right {
+      transform: rotate(20deg) scale(1.2);
+    }
+    .flags img {
+      height: 20px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+    .card h3 {
+      margin: 30px 0 10px;
+      font-size: 1.5rem;
+      color: #333;
+    }
+    .card p {
+      font-size: 1.1rem;
+      color: #666;
+      margin: 10px 0 20px;
+    }
+    .card a {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 5px;
+      font-size: 0.95rem;
+      transition: background-color 0.3s;
+      min-width: 200px;
+    }
+    .view-doc {
+      background-color: #28a745;
+      color: white;
+    }
+    .view-doc:hover {
+      background-color: #218838;
+    }
+    .view-infografica {
+      background-color: #ff9800;
+      color: white;
+    }
+    .view-infografica:hover {
+      background-color: #e68900;
+    }
+    .pdf-link {
+      background-color: #007acc;
+      color: white;
+    }
+    .pdf-link:hover {
+      background-color: #005fa3;
+    }
+    .download-doc {
+      background-color: #007acc;
+      color: white;
+    }
+    .download-doc:hover {
+      background-color: #005fa3;
+    }
+    .download-audio {
+      background-color: #9c27b0;
+      color: white;
+    }
+    .download-audio:hover {
+      background-color: #7b1fa2;
+    }
+    .card a i {
+      margin-right: 8px;
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 700px) {
+      .card.cat {
+        grid-column: span 1;
+      }
+    }
+    @media (max-width: 480px) {
+      .card {
+        padding: 15px;
+      }
+      .card h3 {
+        font-size: 1.3rem;
+      }
+      .card p {
+        font-size: 1rem;
+      }
+      .card a {
+        width: 100%;
+        min-width: unset;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>VA Iberica 2025</header>
+  <div class="cards-wrapper">
+    <div class="card">
+      <div class="flags">
+        <img src="https://flagcdn.com/w40/it.png" alt="Italia" />
+        <img src="https://flagcdn.com/w40/es.png" alt="Spagna" />
+      </div>
+      <h3>T1 | Milano > Roses > Cadaques</h3>
+      <a href="VA_T1_SPA.html" class="view-doc"><i class="fas fa-file-alt"></i>Visualizza Guida Interattiva</a><br />
+      <a href="VA_T1_IG.html" class="view-infografica"><i class="fas fa-chart-pie"></i>Visualizza Infografica</a><br />
+      <a href="Va_T1_Milano_Roses_Cadaques.pdf" target="_blank" class="pdf-link"><i class="fas fa-book-open"></i>Visualizza Guida</a><br />
+      <a href="Va_T1_Milano_Roses_Cadaques.pdf" download class="download-doc"><i class="fas fa-file-download"></i>Scarica Guida</a><br />
+      <a href="VA_T1.mp3" download class="download-audio"><i class="fas fa-headphones"></i>Scarica Audio</a>
+    </div>
+    <div class="card">
+      <div class="flags">
+        <img src="https://flagcdn.com/w40/es.png" alt="Spagna" />
+      </div>
+      <h3>T2 | Roses > Lorca</h3>
+      <a href="VA_T2_SPA.html" class="view-doc"><i class="fas fa-file-alt"></i>Visualizza Guida Interattiva</a><br />
+      <a href="VA_T2_IG.html" class="view-infografica"><i class="fas fa-chart-pie"></i>Visualizza Infografica</a><br />
+      <a href="Va_T2_Roses_Lorca.pdf" target="_blank" class="pdf-link"><i class="fas fa-book-open"></i>Visualizza Guida</a><br />
+      <a href="Va_T2_Roses_Lorca.pdf" download class="download-doc"><i class="fas fa-file-download"></i>Scarica Guida</a><br />
+      <a href="VA_T2.mp3" download class="download-audio"><i class="fas fa-headphones"></i>Scarica Audio</a>
+    </div>
+    <div class="card">
+      <div class="flags">
+        <img src="https://flagcdn.com/w40/es.png" alt="Spagna" />
+      </div>
+      <h3>T2-E | Lorca > Caminito - Consuegra</h3>
+      <a href="VA_T2E_SPA.html" class="view-doc"><i class="fas fa-file-alt"></i>Visualizza Guida Interattiva</a><br />
+      <a href="VA_T2E_IG.html" class="view-infografica"><i class="fas fa-chart-pie"></i>Visualizza Infografica</a><br />
+      <a href="Va_T2E_Lorca_Caminito_Consuegra.pdf" target="_blank" class="pdf-link"><i class="fas fa-book-open"></i>Visualizza Guida</a><br />
+      <a href="Va_T2E_Lorca_Caminito_Consuegra.pdf" download class="download-doc"><i class="fas fa-file-download"></i>Scarica Guida</a><br />
+      <a href="VA_T2E.mp3" download class="download-audio"><i class="fas fa-headphones"></i>Scarica Audio</a>
+    </div>
+    <div class="card">
+      <div class="flags">
+        <img src="https://flagcdn.com/w40/es.png" alt="Spagna" />
+      </div>
+      <h3>T3 | Lorca > Tortosa > Barcellona</h3>
+      <a href="VA_T3_SPA.html" class="view-doc"><i class="fas fa-file-alt"></i>Visualizza Guida Interattiva</a><br />
+      <a href="VA_T3_IG.html" class="view-infografica"><i class="fas fa-chart-pie"></i>Visualizza Infografica</a><br />
+      <a href="Va_T3_Lorca_Tortosa_Barcellona.pdf" target="_blank" class="pdf-link"><i class="fas fa-book-open"></i>Visualizza Guida</a><br />
+      <a href="Va_T3_Lorca_Tortosa_Barcellona.pdf" download class="download-doc"><i class="fas fa-file-download"></i>Scarica Guida</a><br />
+      <a href="VA_T3.mp3" download class="download-audio"><i class="fas fa-headphones"></i>Scarica Audio</a>
+    </div>
+    <div class="card cat">
+      <div class="icon-top-right"><i class="fas fa-map"></i></div>
+      <h3>CAT</h3>
+      <p>Caccia Al Tesoro</p>
+      <a href="cat.html" class="view-doc"><i class="fas fa-map-marker-alt"></i>Vai alla pagina</a>
+    </div>
+  </div>
+</body>
+</html>

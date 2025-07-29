@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caccia al Tesoro</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Leaflet.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Google Fonts: Poppins e Nunito per un look moderno e leggibile -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f4f8; /* Un grigio-azzurro molto chiaro */
+        }
+        .font-header {
+            font-family: 'Poppins', sans-serif;
+        }
+        #map {
+            height: 500px;
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            z-index: 0;
+        }
+        .btn-home {
+            background-color: #3B82F6; /* Blu acceso */
+            color: white;
+        }
+        .btn-home:hover {
+            background-color: #2563EB; /* Blu più scuro */
+        }
+        .card-tappa {
+            background-color: white;
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden; /* Per arrotondare l'immagine */
+        }
+        .card-tappa:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .card-tappa img {
+            transition: transform 0.3s ease;
+        }
+        .card-tappa:hover img {
+            transform: scale(1.05);
+        }
+        /* Stile per il modale dell'immagine */
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Intestazione a larghezza piena -->
+<header class="bg-white shadow-sm">
+    <div class="container mx-auto p-4 flex flex-col sm:flex-row justify-between items-center">
+        <h1 class="font-header text-5xl font-bold text-gray-800 mb-4 sm:mb-0">
+            Caccia al Tesoro
+        </h1>
+        <!-- Contenitore per i pulsanti -->
+        <div class="flex items-center gap-4">
+            <a href="rules.html" class="bg-slate-200 text-slate-800 font-bold py-3 px-6 rounded-full shadow-lg transition-transform transform hover:scale-105 inline-flex items-center">
+                Regolamento
+            </a>
+            <a href="porompompom.html" class="btn-home font-bold py-3 px-6 rounded-full shadow-lg transition-transform transform hover:scale-105 inline-flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                Home
+            </a>
+        </div>
+    </div>
+</header>
+
+    <!-- Contenuto principale centrato -->
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <main>
+            <!-- Introduction -->
+            <section class="text-center mb-16">
+                <h2 class="font-header text-4xl md:text-5xl font-bold text-slate-900 mb-4">Benvenuti Avventurieri!</h2>
+                <p class="max-w-3xl mx-auto text-lg text-slate-600 leading-relaxed">
+                    La leggenda narra di un tesoro nascosto, celato tra i vicoli e le coste di questo luogo incantato. Solo i più astuti riusciranno a decifrare gli indizi. Osservate le immagini, seguite il percorso sulla mappa e che la caccia abbia inizio!
+                </p>
+            </section>
+
+            <!-- Sezione Mappa -->
+            <section class="mb-12">
+                <h2 class="font-header text-3xl font-bold mb-4 text-center text-gray-700">La Mappa del Tesoro</h2>
+                <div id="map"></div>
+            </section>
+
+            <!-- Sezione Tappe -->
+            <section>
+                <h2 class="font-header text-3xl font-bold mb-6 text-center text-gray-700">Gli indizi visivi</h2>
+                <div id="tappe-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Le card verranno popolate da JavaScript -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer a larghezza piena -->
+    <footer class="bg-gray-900 text-gray-300 mt-12">
+        <div class="container mx-auto px-6 py-6 text-center">
+            <p>&copy; 2025 Caccia al Tesoro. Che la fortuna vi assista!</p>
+        </div>
+    </footer>
+
+    <!-- Modale per visualizzare l'immagine ingrandita -->
+    <div id="image-modal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none cursor-pointer" onclick="closeModal()">
+        <img id="modal-img" src="" alt="Indizio ingrandito" class="max-w-[95vw] max-h-[95vh] rounded-lg shadow-2xl object-contain" onclick="event.stopPropagation()">
+    </div>
+
+    <script>
+        // --- FUNZIONI PER IL MODALE ---
+        function openModal(src) {
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-img');
+            modalImg.src = src;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // --- DATI ESTRATTI DAL KML ---
+
+            // Percorso 1
+            const path1 = [
+                [42.28357,3.291074],[42.283579,3.29107],[42.283669,3.291119],[42.283734,3.291229],[42.28373,3.291413],[42.283635,3.291505],[42.283069,3.292023],[42.282992,3.292098],[42.282982,3.292102],[42.282982,3.292142],[42.283032,3.29223],[42.283039,3.292255],[42.283055,3.292275],[42.283112,3.292377],[42.283108,3.292364],[42.28311,3.292334],[42.283127,3.29238],[42.28318,3.2924],[42.283208,3.292328],[42.283244,3.292395],[42.283261,3.292522],[42.283255,3.29257],[42.283268,3.292627],[42.283307,3.292746],[42.283273,3.29281],[42.28319,3.292956],[42.283215,3.293058],[42.283208,3.293167],[42.283209,3.293242],[42.28328,3.293299],[42.283295,3.293316],[42.283329,3.293406],[42.283323,3.293434],[42.28336,3.29364],[42.283353,3.293718],[42.283331,3.293785],[42.283321,3.293817],[42.283297,3.293894],[42.283337,3.293977],[42.283332,3.293982],[42.283279,3.294051],[42.28323,3.294102],[42.283252,3.294125],[42.283247,3.294111],[42.283222,3.294114],[42.283183,3.294099],[42.283146,3.294188],[42.283144,3.294187],[42.283144,3.294227],[42.283112,3.294264],[42.283125,3.294348],[42.283129,3.294385],[42.28321,3.294522],[42.283211,3.294528],[42.283299,3.294662],[42.283299,3.294686],[42.283311,3.294786],[42.283276,3.294908],[42.283342,3.295035],[42.283405,3.295035],[42.283441,3.295029],[42.283589,3.294959],[42.283614,3.294944],[42.283702,3.294886],[42.283793,3.294865],[42.2839,3.294863],[42.283922,3.29486],[42.283992,3.294869],[42.284023,3.294932],[42.284027,3.294964],[42.284033,3.295023],[42.284045,3.295097],[42.284118,3.295127],[42.284159,3.29505],[42.284179,3.295025],[42.284235,3.294975],[42.284274,3.294925],[42.284249,3.294899],[42.284308,3.294921],[42.284314,3.294918],[42.284356,3.294906],[42.284428,3.294885],[42.284492,3.294961],[42.284505,3.295167],[42.284499,3.295189],[42.28449,3.29524],[42.284457,3.295264],[42.284423,3.29531],[42.284366,3.295363],[42.284348,3.295474],[42.284373,3.295631],[42.284444,3.295755],[42.28452,3.295916],[42.284545,3.295936],[42.284601,3.295959],[42.284647,3.295958],[42.284663,3.295951],[42.284737,3.295875],[42.28481,3.295821],[42.284929,3.295735],[42.285013,3.29568],[42.285044,3.295644],[42.285199,3.295525],[42.285317,3.295376],[42.285402,3.295248],[42.285435,3.295188],[42.285521,3.295159],[42.285621,3.295279],[42.285668,3.295356],[42.285746,3.295453],[42.285786,3.2955],[42.285857,3.295594],[42.285934,3.2957],[42.285956,3.295727],[42.285995,3.295825],[42.285943,3.296002],[42.285844,3.296148],[42.285809,3.29618],[42.28574,3.296329],[42.28571,3.296507],[42.285699,3.296669],[42.285691,3.296872],[42.285678,3.297053],[42.285643,3.297196],[42.285592,3.297365],[42.2856,3.297423],[42.285711,3.29751],[42.285843,3.297466],[42.28596,3.297444],[42.286042,3.297377],[42.28619,3.29734],[42.286332,3.297328],[42.286433,3.297268],[42.286439,3.297259],[42.286552,3.297108],[42.286646,3.297044],[42.286709,3.296998],[42.286756,3.296963],[42.286865,3.296828],[42.28699,3.296681],[42.287136,3.296589],[42.287175,3.296551],[42.287218,3.296498],[42.287298,3.296395],[42.287423,3.296274],[42.287511,3.296215],[42.287577,3.296221],[42.287659,3.296355],[42.2877,3.296393],[42.28771,3.296488],[42.287673,3.296707],[42.287668,3.296749],[42.287694,3.296912],[42.287687,3.296977],[42.287673,3.297044],[42.287692,3.297037],[42.287771,3.297044],[42.28791,3.297009],[42.288037,3.296967],[42.288153,3.296894],[42.288219,3.296814],[42.288338,3.296712],[42.288412,3.296631],[42.288532,3.296539],[42.288625,3.296439],[42.28868,3.296385],[42.288775,3.296323],[42.288918,3.296237],[42.28905,3.296154],[42.28912,3.296135],[42.289202,3.296087],[42.289293,3.296014],[42.289416,3.295882],[42.289441,3.295802],[42.289545,3.29559],[42.289679,3.295464],[42.289753,3.295392],[42.289859,3.295235],[42.289922,3.295131],[42.290005,3.294952],[42.290029,3.294891],[42.290047,3.294794],[42.290092,3.294604],[42.290086,3.294528],[42.29008,3.294316],[42.290081,3.294265],[42.290031,3.294084],[42.290055,3.293984],[42.290098,3.293938],[42.290196,3.293794],[42.290231,3.293706],[42.290227,3.293634],[42.29021,3.293576],[42.290196,3.29352],[42.290149,3.293489],[42.290132,3.293328],[42.290127,3.293316],[42.290122,3.293129],[42.290136,3.292921],[42.290067,3.292721],[42.290025,3.2926],[42.290041,3.29255],[42.290016,3.292601],[42.289961,3.292669],[42.289808,3.292751],[42.28981,3.292713],[42.289806,3.292688],[42.289812,3.292638],[42.289838,3.292407],[42.289864,3.292307],[42.289862,3.292213],[42.289883,3.292133],[42.289902,3.292027],[42.289898,3.292012],[42.289894,3.292018],[42.289843,3.29201],[42.289764,3.291986],[42.289789,3.291981],[42.289791,3.291918],[42.289733,3.291818],[42.289748,3.291775],[42.28968,3.291855],[42.289688,3.291842],[42.289765,3.291713],[42.289764,3.291688],[42.289762,3.291684],[42.289754,3.291658],[42.289736,3.291624],[42.289707,3.291656],[42.28967,3.291667],[42.289546,3.291685],[42.289451,3.291611],[42.289431,3.291572],[42.289373,3.291484],[42.289371,3.29148],[42.289389,3.291343],[42.28941,3.2913],[42.289431,3.291114],[42.289437,3.291083],[42.289439,3.291016],[42.289428,3.290952],[42.289464,3.290712],[42.289465,3.29069],[42.289467,3.290685],[42.289526,3.290614],[42.289641,3.290529],[42.289666,3.290507],[42.289676,3.290491],[42.289686,3.290487],[42.289759,3.290421],[42.289886,3.290315],[42.289925,3.290267],[42.289999,3.290217],[42.2901,3.290091],[42.290168,3.289994],[42.290238,3.28993],[42.290258,3.289923],[42.290339,3.289839],[42.29039,3.289746],[42.290465,3.289631],[42.2905,3.289508],[42.290564,3.289423],[42.29062,3.289399],[42.290702,3.289323],[42.290833,3.289218],[42.290908,3.289165],[42.290956,3.289062],[42.290998,3.288874],[42.291043,3.288823],[42.291134,3.288779],[42.291159,3.288768],[42.2912,3.288704],[42.2912,3.28869],[42.291313,3.288482],[42.291318,3.28847],[42.291374,3.28837],[42.291387,3.288272],[42.291418,3.288192],[42.291429,3.288166],[42.291483,3.28806],[42.291496,3.288045],[42.291528,3.288013],[42.291582,3.287986],[42.291622,3.287921],[42.291658,3.287885],[42.2917,3.287766],[42.291745,3.287642],[42.291816,3.287541],[42.291861,3.287417],[42.291863,3.287401],[42.291864,3.287369],[42.291867,3.287355],[42.291889,3.287212],[42.291905,3.287129],[42.291902,3.287096],[42.291912,3.287063],[42.291932,3.287057],[42.291941,3.287063],[42.291973,3.28705],[42.292071,3.287069],[42.292086,3.287068],[42.292095,3.287074],[42.292114,3.287072],[42.292131,3.287056],[42.292173,3.287005],[42.292182,3.286975],[42.292172,3.28698],[42.292217,3.286969],[42.292235,3.286958],[42.292271,3.286931],[42.292271,3.286914],[42.29229,3.286898],[42.292387,3.286761],[42.292436,3.286698],[42.292437,3.286683],[42.292621,3.286584],[42.292732,3.28655],[42.292815,3.286531],[42.292841,3.286538],[42.292865,3.286534],[42.292986,3.286476],[42.293,3.286493],[42.293008,3.286499],[42.293091,3.286472],[42.293182,3.286327],[42.293187,3.286316],[42.293241,3.286221]
+            ];
+
+            // Percorso 2
+            const path2 = [
+                [42.283632, 3.291146],[42.283669, 3.291119],[42.283579, 3.29107],[42.283234, 3.291231],[42.283124, 3.291247],[42.283023, 3.291193],[42.282869, 3.291042],[42.282837, 3.291009],[42.282774, 3.290876],[42.282759, 3.290748],[42.282704, 3.290701],[42.282574, 3.290699],[42.282488, 3.29077],[42.282192, 3.290536],[42.282196, 3.290443],[42.282298, 3.290298],[42.282406, 3.290179],[42.282427, 3.290153],[42.282575, 3.28997],[42.282662, 3.289897],[42.282726, 3.2898],[42.282764, 3.28967],[42.282777, 3.289465],[42.282835, 3.289235],[42.282869, 3.28919],[42.282954, 3.289149],[42.283108, 3.289022],[42.283265, 3.288843],[42.28331, 3.28883],[42.283411, 3.288833],[42.28351, 3.288868],[42.283519, 3.288839],[42.283541, 3.288751],[42.283578, 3.288565],[42.283578, 3.288404],[42.283566, 3.28824],[42.283536, 3.288132],[42.283418, 3.288011],[42.283378, 3.287994],[42.283297, 3.287981],[42.283244, 3.287933],[42.283175, 3.287927],[42.283033, 3.287955],[42.282912, 3.288015],[42.282856, 3.287972],[42.282803, 3.287956],[42.282672, 3.287977],[42.282644, 3.288004],[42.282616, 3.287997],[42.282591, 3.287845],[42.282654, 3.287648],[42.282668, 3.287558],[42.282712, 3.287507],[42.282778, 3.287489],[42.2828, 3.28747],[42.282868, 3.287488],[42.282905, 3.287456],[42.282933, 3.287421],[42.282981, 3.287399],[42.28302, 3.287403],[42.283059, 3.287459],[42.283172, 3.287436],[42.283261, 3.287372],[42.283305, 3.287342],[42.283347, 3.287347],[42.283378, 3.287341],[42.283412, 3.287294],[42.283493, 3.287227],[42.283562, 3.287196],[42.283615, 3.287208],[42.283837, 3.287082],[42.283874, 3.28708],[42.2839, 3.287106],[42.283921, 3.287155],[42.283957, 3.287148],[42.283984, 3.287131],[42.284018, 3.287062],[42.28407, 3.287057],[42.284144, 3.287252],[42.284135, 3.287363],[42.28415, 3.287499],[42.284318, 3.287739],[42.284613, 3.287944],[42.284768, 3.28802],[42.284847, 3.287924],[42.285264, 3.287394],[42.28542, 3.287189],[42.285546, 3.286932],[42.285765, 3.286553],[42.286017, 3.286326],[42.286168, 3.286062],[42.28617, 3.286002],[42.286169, 3.28591],[42.286104, 3.285736],[42.286057, 3.2856],[42.285921, 3.285543],[42.285844, 3.285465],[42.285804, 3.285355],[42.285736, 3.285222],[42.285648, 3.285106],[42.28553, 3.284973],[42.28547, 3.284863],[42.285438, 3.284789],[42.285373, 3.284718],[42.285358, 3.284683],[42.28537, 3.284627],[42.285846, 3.283855],[42.28595, 3.28351],[42.286008, 3.283312],[42.286483, 3.282638],[42.286582, 3.282458],[42.286758, 3.282009],[42.286797, 3.281942],[42.286861, 3.281874],[42.286933, 3.281818],[42.287332, 3.281613],[42.287374, 3.281617],[42.287405, 3.28164],[42.287564, 3.28186],[42.287595, 3.281881],[42.287636, 3.281879],[42.28768, 3.281852],[42.287757, 3.281807],[42.287809, 3.28183],[42.287827, 3.281818],[42.287843, 3.281767],[42.287891, 3.281684],[42.287924, 3.281581],[42.287978, 3.281363],[42.288029, 3.28126],[42.288203, 3.281165],[42.288309, 3.28116],[42.288614, 3.281193],[42.288773, 3.280986],[42.288877, 3.281213],[42.288925, 3.281253],[42.288997, 3.28141],[42.289108, 3.281525],[42.289205, 3.281609],[42.289297, 3.281712],[42.28938, 3.2818],[42.289573, 3.281917],[42.289632, 3.28195],[42.289746, 3.282038],[42.289887, 3.282126],[42.290159, 3.28219],[42.290262, 3.282242],[42.290435, 3.282353],[42.290593, 3.282571],[42.290639, 3.282647],[42.290779, 3.28286],[42.290983, 3.28308],[42.291074, 3.283138],[42.29122, 3.283187],[42.291355, 3.283175],[42.291395, 3.283206],[42.291441, 3.28322],[42.291538, 3.28318],[42.291726, 3.283166],[42.291741, 3.283286],[42.291753, 3.28337],[42.291797, 3.283509],[42.291876, 3.283662],[42.291897, 3.283745],[42.291964, 3.283787],[42.292074, 3.283903],[42.29212, 3.283952],[42.292245, 3.284062],[42.292432, 3.284181],[42.292559, 3.28422],[42.292673, 3.284301],[42.292686, 3.284323],[42.292712, 3.284367],[42.292749, 3.284488],[42.292801, 3.284581],[42.292859, 3.284603],[42.293046, 3.28464],[42.293189, 3.284689],[42.293334, 3.284831],[42.293572, 3.285035],[42.293784, 3.285277],[42.293753, 3.285394],[42.293613, 3.285742],[42.293583, 3.285861],[42.293476, 3.286046],[42.293458, 3.286074],[42.293376, 3.286032],[42.293341, 3.286035],[42.29331, 3.286051],[42.293249, 3.286159],[42.293225, 3.286206]
+            ];
+            
+            // Waypoint degli indizi estratti dal KML
+            const indiziWaypoints = [
+				{ name: "Indizio 1", coords: [42.2876034, 3.2816763] },
+				{ name: "Indizio 2", coords: [42.2845421, 3.2877986] },
+                { name: "Indizio 3", coords: [42.2827794, 3.290731] },
+                { name: "Indizio 4", coords: [42.2835993, 3.2911795] },
+                { name: "Indizio 5", coords: [42.284335, 3.2950326] },
+                { name: "Indizio 6", coords: [42.2855506, 3.2975686] },
+                { name: "Indizio 7", coords: [42.2931078, 3.2861689] },
+                { name: "Indizio 8", coords: [42.2920584, 3.2840127] },
+                { name: "Indizio 9", coords: [42.2901696, 3.2821734] },
+            ];
+
+            // Dati per le card degli indizi (solo per la visualizzazione)
+            const tappeInfo = [
+                { titolo: "Indizio N° 1", immagine: "CATC/P-09.jpg", indizio: "Da qui, l'intera baia si mostra in tutto il suo splendore." },
+                { titolo: "Indizio N° 2", immagine: "CATC/P-08.jpg", indizio: "Una caletta riparata, lontana dalla folla." },
+                { titolo: "Indizio N° 3", immagine: "CATC/P-07.jpg", indizio: "Anche nei luoghi più belli, c'è sempre qualcosa in costruzione." },
+                { titolo: "Indizio N° 4", immagine: "CATC/P-06.jpg", indizio: "La civiltà si allontana, il percorso si fa più selvaggio." },
+                { titolo: "Indizio N° 5", immagine: "CATC/P-05.jpg", indizio: "Sulla cima della scogliera, si cela un segreto." },
+                { titolo: "Indizio N° 6", immagine: "CATC/P-04.jpg", indizio: "Le rocce incontrano il mare." },
+                { titolo: "Indizio N° 7", immagine: "CATC/P-03.jpg", indizio: "Le barche riposano sulla sabbia." },
+                { titolo: "Indizio N° 8", immagine: "CATC/P-02.jpg", indizio: "Un luogo di riposo con una panchina solitaria." },
+				{ titolo: "Indizio N° 9", immagine: "CATC/P-01.jpg", indizio: "Dove due sentieri si incontrano." },
+            ];
+            
+            // --- INIZIALIZZAZIONE MAPPA E POPOLAMENTO ---
+
+            const tappeContainer = document.getElementById('tappe-container');
+            tappeInfo.forEach((tappa, index) => {
+                const numeroIndizio = index + 1;
+                const fallbackText = `Indizio+${numeroIndizio}`;
+                
+                const cardElement = document.createElement('div');
+                cardElement.className = "card-tappa flex flex-col cursor-pointer";
+                cardElement.innerHTML = `
+                    <div class="overflow-hidden">
+                        <img src="${tappa.immagine}" alt="Immagine ${tappa.titolo}" class="w-full h-56 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/3B82F6/ffffff?text=${fallbackText}';">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <h3 class="font-header text-xl font-bold text-gray-800 mb-2">${tappa.titolo}</h3>
+                        <p class="text-gray-600 flex-grow">${tappa.indizio}</p>
+                    </div>
+                `;
+                
+                cardElement.addEventListener('click', () => openModal(tappa.immagine));
+                tappeContainer.appendChild(cardElement);
+            });
+
+            const map = L.map('map');
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            // Disegna i due tracciati KML sulla mappa CON LO STESSO COLORE
+            const polyline1 = L.polyline(path1, { color: '#3B82F6', weight: 5, opacity: 0.8 }).addTo(map);
+            const polyline2 = L.polyline(path2, { color: '#3B82F6', weight: 5, opacity: 0.8 }).addTo(map);
+
+            // Aggiungi SOLO i waypoint degli indizi
+            indiziWaypoints.forEach((wp, index) => {
+                const numberIcon = L.divIcon({
+                    html: `<div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg shadow-md border-2 border-white">${index + 1}</div>`,
+                    className: '',
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 16]
+                });
+                L.marker(wp.coords, { icon: numberIcon }).addTo(map)
+                    .bindPopup(`<b>${wp.name}</b>`);
+            });
+            
+            // Centra la mappa per mostrare entrambi i percorsi
+            const allPaths = new L.featureGroup([polyline1, polyline2]);
+            map.fitBounds(allPaths.getBounds().pad(0.1));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografica di Viaggio: Roses > Lorca</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Energetic & Playful -->
+    <!-- Application Structure Plan: Ho progettato l'infografica come una singola pagina a scorrimento verticale (scrollytelling). Una barra di navigazione superiore fissa permette di saltare tra le sezioni tematiche (Itinerario, Storia, Cibo, ecc.), che fungono da capitoli della narrazione. Questa struttura è ideale per un'infografica perché guida l'utente attraverso una storia lineare, ma offre anche la libertà di esplorare argomenti specifici. -->
+    <!-- Visualization & Content Choices: Dati Itinerario -> Goal: Inform/Compare -> Viz: Card + 'Big Number'. Punti di Interesse/Leggende/Cibo -> Goal: Organize -> Viz: Griglia di Card -> Interaction: Effetto hover -> Justification: Le card sono perfette per raggruppare e presentare blocchi di testo e dati in modo coerente e visivamente separato. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F7F9FB;
+        }
+        .nav-link.active {
+            color: #FF6B6B;
+            font-weight: 700;
+        }
+        /* Giustifica il testo di tutti i paragrafi nelle sezioni */
+        section p {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4">
+            <ul id="main-nav" class="flex items-center justify-center space-x-4 sm:space-x-8 overflow-x-auto whitespace-nowrap py-3">
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="text-center py-20 sm:py-28 bg-white">
+            <div class="container mx-auto px-4">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-[#073B4C]">VA - T2: Il Viaggio</h1>
+                <p class="mt-4 text-xl md:text-2xl font-bold text-[#118AB2]">Da Roses a Lorca</p>
+                <p class="mt-2 max-w-2xl mx-auto text-slate-500">Un'infografica interattiva per esplorare l'itinerario, la storia, le leggende e i sapori del sud della Spagna.</p>
+            </div>
+        </section>
+
+        <div id="content-sections" class="container mx-auto px-4 py-16 space-y-24">
+        </div>
+    </main>
+
+    <footer class="bg-[#073B4C] text-white py-8">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p>Infografica basata sul documento di viaggio.</p>
+            <p class="mt-1 text-slate-400">&copy; 2025 - Tutti i diritti riservati.</p>
+        </div>
+    </footer>
+
+    <script>
+        const travelData = {
+            sections: [
+                { id: 'itinerario', title: 'Itinerario', icon: '👣' },
+                { id: 'spirituale', title: 'Spiritualità', icon: '🛐' },
+                { id: 'storico', title: 'Storia', icon: '📚' },
+                { id: 'avventura', title: 'Avventura', icon: '🪃' },
+                { id: 'leggende', title: 'Leggende', icon: '🔮' },
+                { id: 'cibo', title: 'Gastronomia', icon: '🍴' },
+            ],
+            content: {
+                itinerario: {
+                    intro: "Il viaggio inizia qui. Questa sezione traccia il percorso da Roses a Lorca, evidenziando le distanze e i tempi, e propone un itinerario costiero alternativo per scoprire le spiagge più belle al confine tra Murcia e Andalusia.",
+                    main_route: {
+                        day: 'Giorno 4',
+                        title: 'Tappa Principale: Roses → Lorca',
+                        distance: '770',
+                        time: 7.15,
+                        route: "Da Roses, il viaggio si svolge quasi interamente sull'autostrada AP-7, la spina dorsale della costa mediterranea spagnola, per poi proseguire sulla A-7. Il percorso aggira le grandi aree urbane di Barcellona e Valencia, prima di tagliare verso l'entroterra in direzione di Murcia e infine Lorca.",
+                        features: "Preparati a un notevole cambiamento di paesaggio. Si parte dalle coste della Catalogna, si attraversano i campi di agrumi della Comunità Valenciana e si arriva ai panorami aridi e brulli della Regione di Murcia. Assicurati che l'aria condizionata funzioni a dovere e smetti di giocare col telefonino!"
+                    },
+                    coastal_route: {
+                        title: 'Itinerario Costiero (Giorno 5/6/7/8 Random)',
+                        description: 'Una deviazione verso il mare per scoprire le calette e le spiagge di San Juan de los Terreros, al confine tra Murcia e Andalusia.',
+                        beaches: [
+                            { name: 'Playa de los Cocedores', description: 'Un anfiteatro naturale protetto da scogliere di arenaria e roccia vulcanica. Le sue acque cristalline e poco profonde la rendono perfetta per le famiglie.' },
+                            { name: 'Playa de las Palmeras', description: 'Isolata e selvaggia, deve il suo nome a un caratteristico gruppo di palme e conserva i resti di un\'antica noria.' },
+                            { name: 'Mar Rabiosa & Mar Serena', description: 'Il cuore balneare locale. Due spiagge con Bandiera Blu, una più esposta alle onde (Rabiosa) e una quasi sempre calma (Serena).' },
+                            { name: 'Playa de los Nardos', description: 'Una spiaggia fossile di grande interesse geologico ed ecologico, con praterie di Posidonia che indicano la purezza delle acque.' },
+                        ]
+                    }
+                },
+                spirituale: {
+                    intro: "Un viaggio nella fede e nella storia di Lorca, una città segnata dalla Riconquista, dove la devozione popolare ha dato vita a chiese imponenti e celebrazioni uniche.",
+                    points: [
+                        { name: "Insigne Colegiata de San Patricio", classification: "Spirituale e Storico", description: "Concepita con l'ambizione di una cattedrale, questa imponente chiesa rinascimentale fu eretta per celebrare la vittoria cristiana nella Battaglia de los Alporchones, avvenuta nel giorno di San Patrizio." },
+                        { name: "Iglesia y Convento de San Francisco", classification: "Spirituale e Storico", description: "Eretta nel XVI secolo, questa chiesa barocca è un simbolo della celebre Semana Santa di Lorca, in quanto sede della Hermandad de Labradores (Passo Blu)." },
+                    ]
+                },
+                storico: {
+                    intro: "Immergiti nella ricca storia di Lorca, una città di frontiera. Dalla sua imponente fortezza, che fu sentinella contro il Regno di Granada, al suo cuore barocco, ogni angolo racconta secoli di conflitti e prosperità.",
+                    points: [
+                         { name: "Castillo de Lorca (Fortaleza del Sol)", classification: "Militare e Archeologico", description: "Questa imponente fortezza fu per 250 anni una sentinella inespugnabile contro il Regno di Granada. Al suo interno custodisce i resti del quartiere ebraico e della sua sinagoga." },
+                         { name: "Plaza de España", classification: "Storico e Architettonico", description: "Considerata una delle piazze barocche più belle della Spagna, è il cuore monumentale di Lorca, dove si affacciano i principali edifici del potere religioso e civile." }
+                    ]
+                },
+                avventura: {
+                    intro: "Se cerchi l'avventura, questa è la sezione per te. Abbandona l'asfalto per esplorare oasi naturali inaspettate e meraviglie geologiche che sfidano l'immaginazione.",
+                    points: [
+                        { name: "Parco Regionale della Sierra Espuña", classification: "Avventura Escursionistica", description: "Un imponente massiccio montuoso rimboschito nel XIX secolo. Un'oasi di verde in un paesaggio quasi desertico, dove è facile avvistare la pecora berbera." },
+                        { name: "Il Geode Gigante di Pulpí", classification: "Avventura Geologica", description: "A pochi chilometri dalla costa, la Mina Rica nasconde il geode visitabile più grande del mondo: una cavità con pareti ricoperte da enormi e trasparenti cristalli di gesso." }
+                    ]
+                },
+                leggende: {
+                    intro: "Questa terra è intrisa di leggende nate dall'amore, dall'onore e dalla speranza. Storie di amanti sfortunati e origini mitiche che ancora oggi risuonano tra le antiche pietre di Lorca.",
+                    points: [
+                        { name: "La Leggenda del Cejo de los Enamorados", classification: "Leggenda Romantica", description: "Si racconta che un giovane soldato musulmano e una nobile dama cristiana, di fronte al loro amore impossibile, si gettarono da un'aspra rupe per unire le loro anime nella morte." },
+                        { name: "Il Mito di Fondazione e il Principe Elio-Crota", classification: "Mito di Fondazione", description: "La leggenda narra che Lorca fu fondata dal principe troiano Elio-Crota, fuggito dalla distruzione di Troia, per nobilitarne le origini e collegarla all'epica classica." }
+                    ]
+                },
+                cibo: {
+                    intro: "Benvenuto nella 'huerta' di Murcia, l'orto d'Europa. La cucina locale è robusta e saporita, nata per sfamare pastori e contadini. Preparati a un'immersione in sapori autentici e decisi.",
+                    items: [
+                        { name: "Arroz Bomba", description: "Il riso perfetto per assorbire i sapori." },
+                        { name: "Pimentón de Murcia", description: "L'oro rosso, una paprica dolce e affumicata." },
+                        { name: "Salazones", description: "Pesce salato ed essiccato, un'eredità romana." },
+                        { name: "Zarangollo Murciano", description: "Uova strapazzate con zucchine e cipolle." },
+                        { name: "Caldero del Mar Menor", description: "Un intenso stufato di riso e pesce." },
+                        { name: "Paparajotes", description: "Foglie di limone in pastella, fritte e zuccherate." }
+                    ]
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainNav = document.getElementById('main-nav');
+            const contentSections = document.getElementById('content-sections');
+
+            function render() {
+                // Add Home link
+                mainNav.innerHTML += `
+                    <li>
+                        <a href="porompompom.html" class="nav-link text-sm sm:text-base font-bold text-[#118AB2] hover:text-[#FF6B6B] transition-colors duration-200 py-2" title="Home">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </a>
+                    </li>
+                `;
+                
+                travelData.sections.forEach(section => {
+                    mainNav.innerHTML += `
+                        <li><a href="#${section.id}" data-nav-id="${section.id}" class="nav-link text-sm sm:text-base font-bold text-[#118AB2] hover:text-[#FF6B6B] transition-colors duration-200 py-2">${section.title.toUpperCase()}</a></li>
+                    `;
+
+                    const data = travelData.content[section.id];
+                    let sectionHTML = `
+                        <section id="${section.id}" class="scroll-mt-20">
+                            <div class="text-center mb-12">
+                                <span class="text-4xl">${section.icon}</span>
+                                <h2 class="mt-2 text-3xl md:text-4xl font-extrabold text-[#073B4C]">${section.title}</h2>
+                                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">${data.intro}</p>
+                            </div>
+                    `;
+
+                    if (section.id === 'itinerario') {
+                        const main = data.main_route;
+                        const coastal = data.coastal_route;
+                        sectionHTML += `
+                            <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-[#FFD166] mb-16">
+                                <h3 class="text-2xl font-bold text-[#073B4C] mb-4">${main.title}</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="md:col-span-1 text-center">
+                                        <p class="text-5xl font-extrabold text-[#118AB2]">${main.distance}</p>
+                                        <p class="text-sm font-bold text-slate-500">KM</p>
+                                        <p class="text-5xl font-extrabold text-[#118AB2] mt-4">${main.time.toFixed(2).replace('.', 'h ')}</p>
+                                        <p class="text-sm font-bold text-slate-500">ORE (circa)</p>
+                                    </div>
+                                    <div class="md:col-span-2 space-y-3 text-sm">
+                                        <div><h4 class="font-bold">Percorso:</h4><p>${main.route}</p></div>
+                                        <div><h4 class="font-bold">Caratteristiche:</h4><p>${main.features}</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-2xl font-bold text-center text-[#073B4C]">${coastal.title}</h3>
+                                <p class="text-center max-w-2xl mx-auto mt-2 mb-8 text-slate-600">${coastal.description}</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                ${coastal.beaches.map(beach => `
+                                    <div class="bg-slate-50 rounded-lg p-4 border-l-4 border-[#06D6A0]">
+                                        <h4 class="font-bold text-[#118AB2]">${beach.name}</h4>
+                                        <p class="mt-1 text-sm text-slate-600">${beach.description}</p>
+                                    </div>
+                                `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    } else if (section.id === 'cibo') {
+                        sectionHTML += `
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6">
+                                ${data.items.map(item => `
+                                    <div class="bg-white rounded-lg shadow-md p-4 text-center transform hover:scale-105 transition-transform duration-200">
+                                        <h4 class="font-bold text-[#118AB2]">${item.name}</h4>
+                                        <p class="text-sm text-slate-500 mt-1">${item.description}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    } else {
+                        sectionHTML += `
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                ${data.points.map(item => `
+                                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#06D6A0]">
+                                        <p class="text-sm font-bold text-[#FF6B6B] uppercase">${item.classification}</p>
+                                        <h3 class="text-xl font-bold text-[#073B4C] mt-1">${item.name}</h3>
+                                        <p class="mt-2 text-slate-600">${item.description}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    }
+                    sectionHTML += '</section>';
+                    contentSections.innerHTML += sectionHTML;
+                });
+            }
+
+            function handleScroll() {
+                const sections = document.querySelectorAll('#content-sections section');
+                const navLinks = document.querySelectorAll('.nav-link');
+                let currentSectionId = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 100) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            render();
+            window.addEventListener('scroll', handleScroll);
+        });
+    </script>
+</body>
+</html>

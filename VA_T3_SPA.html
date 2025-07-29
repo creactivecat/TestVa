@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guida di Viaggio: Lorca > Tortosa > Barcellona</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #334155;
+        }
+        section p {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="flex">
+        <aside id="sidebar" class="bg-slate-800 text-white w-64 fixed top-0 left-0 h-full z-20 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+            <div class="p-5 border-b border-slate-700">
+                <h1 class="text-xl font-bold text-amber-400">VA - T3</h1>
+                <p class="text-sm text-slate-300">Lorca > Barcellona</p>
+            </div>
+            <nav id="main-nav" class="flex-grow overflow-y-auto">
+                <ul></ul>
+            </nav>
+            <div class="p-4 text-xs text-center text-slate-500 border-t border-slate-700">
+                <p>&copy; 2025 - Guida Interattiva</p>
+            </div>
+        </aside>
+
+        <button id="menu-toggle" class="md:hidden fixed top-4 left-4 z-30 bg-white p-2 rounded-md shadow-md">
+            <svg id="menu-open-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+            <svg id="menu-close-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <main id="main-content" class="w-full md:ml-64 p-4 sm:p-6 md:p-10">
+        </main>
+    </div>
+
+    <script>
+        const travelData = {
+            title: "🗺️ VA - T3: Lorca > Tortosa > Barcellona",
+            sections: [
+                { id: 'itinerario', title: 'Itinerario', icon: '👣', intro: 'Questa sezione delinea le due tappe del tuo viaggio: il primo giorno da Lorca a Tortosa, e il secondo da Tortosa fino al cuore pulsante della Catalogna, Barcellona.' },
+                { id: 'spirituale', title: 'Mi sento San Giacomo', icon: '🛐', intro: 'Un viaggio nella fede che tocca la storica sede vescovile di Tortosa e la Barcellona di Gaudí, dove la spiritualità ha ispirato capolavori architettonici unici al mondo.' },
+                { id: 'storico', title: 'Il prof. Barbero è il mio idolo', icon: '📚', intro: 'Immergiti nella storia di due città plasmate da secoli di conquiste e culture. Dalla fortezza sul fiume Ebro al cuore romano e medievale di Barcellona, ogni pietra ha una storia da raccontare.' },
+                { id: 'avventura', title: 'Io e Indiana Jones', icon: '🪃', intro: 'Anche in un viaggio tra città storiche c\'è spazio per l\'avventura. Esplora uno degli habitat naturali più importanti del Mediterraneo, un paradiso per gli amanti della natura e del birdwatching.' },
+                { id: 'leggende', title: 'Dylan Dog non è nessuno', icon: '🔮', intro: 'Scopri le leggende che animano queste terre: da mostri fluviali e fantasmi della guerra civile a eroi mitologici e santi che combattono draghi, l\'immaginario popolare è ricco e affascinante.' },
+                { id: 'cibo', title: 'Si, Ok, Tutto molto bello, ma che si mangia?', icon: '🍴', intro: 'Un viaggio gastronomico che unisce due cucine catalane distinte ma ugualmente deliziose: quella delle Terres de l\'Ebre, basata su riso e prodotti del delta, e quella cosmopolita di Barcellona, tra tradizione e avanguardia.' },
+            ],
+            content: {
+                itinerario: {
+                    days: [
+                        { day: 'Giorno 9', title: 'Lorca → Tortosa', distance: '490 KM', time: '5 Ore', route: "Da Lorca, il viaggio si snoda verso nord-est, risalendo la costa mediterranea lungo l'autostrada AP-7. Lascerai la Regione di Murcia per attraversare la Comunità Valenciana ed entrare in Catalogna. L'uscita per Tortosa ti porterà via dall'autostrada per immergerti nel paesaggio fluviale delle Terres de l'Ebre.", features: "È un viaggio di ritorno verso il mare e verso la Catalogna. Le aride pianure lasciano il posto ai rigogliosi agrumeti e alle vaste risaie del Delta dell'Ebro. L'aria si fa più umida e il paesaggio è dominato dalla presenza imponente del fiume più grande di Spagna." },
+                        { day: 'Giorno 10', title: 'Tortosa → Barcellona', distance: '180 KM', time: '2 Ore', route: "Da Tortosa, il viaggio verso nord è un comodo percorso sull'autostrada AP-7. Lascerai alle spalle le Terres de l'Ebre per entrare nel cuore pulsante della Catalogna. Il tragitto passa vicino a Tarragona e Sitges, prima che l'orizzonte inizi a essere dominato dalla silhouette di Barcellona.", features: "Il paesaggio si trasforma progressivamente: i campi coltivati lasciano spazio a una costa sempre più urbanizzata. Il traffico si intensifica man mano che ci si avvicina alla metropoli. Preparati al caos organizzato delle 'rondas', le tangenziali che circondano la città." }
+                    ]
+                },
+                spirituale: [
+                    { name: "Tortosa: Cattedrale di Santa Maria", classification: "Punto di interesse Spirituale", description: "Un magnifico palinsesto di stili. Costruita a partire dal XIV secolo sul sito di un antico foro romano e di una moschea, è un capolavoro del gotico catalano con una sorprendente facciata barocca.", address: "Carrer del Palau, 5, 43500 Tortosa, Tarragona", city: "Focus: Tortosa" },
+                    { name: "Barcellona: Basilica della Sagrada Família", classification: "Punto di interesse Spirituale e Architettonico", description: "Più che una chiesa, è un sogno di pietra, l'opera incompiuta e visionaria di Antoni Gaudí. Un'incredibile fusione di simbolismo cristiano e forme ispirate alla natura, simbolo universale di Barcellona.", address: "Carrer de Mallorca, 401, 08013 Barcelona", city: "Focus: Barcellona" },
+                ],
+                storico: [
+                     { name: "Tortosa: Castello della Suda", classification: "Punto di interesse Storico", description: "La sentinella di Tortosa. Questa imponente fortezza, oggi Parador Nacional, domina la città dalla cima della collina. Dalle sue mura si gode di una vista spettacolare sulla città e sul fiume Ebro.", city: "Focus: Tortosa" },
+                     { name: "Barcellona: Casa Batlló", classification: "Architettonico e Culturale", description: "Uno dei capolavori più emblematici di Gaudí. Un'esplosione di creatività con una facciata che ricorda la leggenda di Sant Jordi e il drago e interni dove le linee rette sono quasi assenti.", city: "Focus: Barcellona" },
+                     { name: "Barcellona: Barri Gòtic", classification: "Storico e Culturale", description: "Il centro politico e storico della città fin dalle sue origini. Perdersi nel suo labirinto di stradine è il modo migliore per scoprire l'anima di Barcellona, tra resti romani e antichi palazzi reali.", city: "Focus: Barcellona" }
+                ],
+                avventura: [
+                    { name: "Parco Naturale del Delta dell'Ebro", classification: "Avventura Naturalistica", description: "Uno degli habitat acquatici più importanti del Mediterraneo occidentale. Un paesaggio piatto e immenso, formato da lagune, dune di sabbia e infinite risaie. È il luogo ideale per il birdwatching, con centinaia di specie, inclusi i fenicotteri rosa." },
+                ],
+                leggende: [
+                    { name: "Tortosa: La Leggenda della Cucafera", classification: "Leggenda Popolare", description: "Si racconta che nelle acque del fiume Ebro vivesse una creatura mostruosa, simile a una tartaruga gigante con testa di drago. Oggi è una delle figure più amate delle feste cittadine.", city: "Focus: Tortosa" },
+                    { name: "La Battaglia dell'Ebro e i Fantasmi", classification: "Memoria Storica", description: "Più che una leggenda, una memoria. Queste terre furono teatro di una delle battaglie più sanguinose della Guerra Civile Spagnola. Si dice che vicino alle trincee si possano ancora sentire gli echi della battaglia.", city: "Focus: Tortosa" },
+                    { name: "La Leggenda di Sant Jordi e il Drago", classification: "Leggenda Popolare", description: "La storia del coraggioso cavaliere che salvò una principessa da un drago, dal cui sangue nacque un roseto. Per questo il 23 aprile in Catalogna si regalano rose e libri.", city: "Focus: Barcellona" },
+                    { name: "La Leggenda della Fondazione di Barcellona", classification: "Mito di Fondazione", description: "Due miti si contendono la nascita della città: uno la attribuisce all'eroe greco Ercole, l'altro al generale cartaginese Amilcare Barca, padre di Annibale, che l'avrebbe chiamata 'Barcino'.", city: "Focus: Barcellona" }
+                ],
+                cibo: {
+                    ebro: {
+                        title: "Prodotti e Piatti (Ebro)",
+                        products: [
+                            { name: "Riso del Delta", description: "Il prodotto re della zona, con DOP. La varietà 'bomba' è perfetta per i piatti di riso locali." },
+                            { name: "Molluschi del Delta", description: "Cozze e ostriche allevate nelle baie del delta, dal sapore intenso e iodato." },
+                            { name: "Anguilla del Delta", description: "Una prelibatezza che si cucina in umido ('suquet') o affumicata." }
+                        ],
+                        dishes: [
+                            { name: "Arròs a Banda", description: "Un piatto di riso tipico dei pescatori, cotto in un brodo saporitissimo e servito 'a parte' rispetto al pesce." },
+                            { name: "Baldana de Arroz", description: "Un sanguinaccio tipico della zona, che mescola il sangue di maiale con riso, pinoli e spezie." },
+                            { name: "Pastissets", description: "Dolcetti a forma di mezzaluna, ripieni di 'cabello de ángel' (confettura di zucca)." }
+                        ]
+                    },
+                    barcelona: {
+                        title: "Prodotti e Piatti (Catalogna/Barcellona)",
+                        products: [
+                            { name: "Botifarra", description: "La salsiccia catalana per eccellenza, fresca o stagionata. La 'botifarra amb mongetes' (con fagioli) è un classico." },
+                            { name: "Cava", description: "Lo spumante prodotto con metodo classico, principalmente nella regione del Penedès." },
+                            { name: "Pa amb Tomàquet", description: "Più che una ricetta, un'istituzione. La base di tutto: pane strofinato con pomodoro, olio e sale." }
+                        ],
+                        dishes: [
+                            { name: "Escalivada", description: "Un misto di verdure (peperoni, melanzane, cipolle) cotte alla brace o al forno, dal sapore affumicato." },
+                            { name: "Fideuà", description: "Simile alla paella, ma al posto del riso si usano dei piccoli spaghetti (fideos) cotti nel brodo di pesce." },
+                            { name: "Crema Catalana", description: "Il dessert catalano per antonomasia, con una crosticina croccante di zucchero caramellato." }
+                        ]
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContent = document.getElementById('main-content');
+            const mainNav = document.getElementById('main-nav').querySelector('ul');
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menu-toggle');
+            const menuOpenIcon = document.getElementById('menu-open-icon');
+            const menuCloseIcon = document.getElementById('menu-close-icon');
+
+            function render() {
+                // Add Home link
+                mainNav.innerHTML += `
+                    <li>
+                        <a href="porompompom.html" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-700 transition-colors duration-200 border-l-4 border-transparent">
+                            <span class="text-xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                            </span>
+                            <span class="font-semibold">Home</span>
+                        </a>
+                    </li>
+                `;
+
+                travelData.sections.forEach(section => {
+                    mainNav.innerHTML += `
+                        <li>
+                            <a href="#${section.id}" data-nav-id="${section.id}" class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-slate-700 transition-colors duration-200 border-l-4 border-transparent">
+                                <span class="text-xl">${section.icon}</span>
+                                <span class="font-semibold">${section.title}</span>
+                            </a>
+                        </li>
+                    `;
+
+                    let sectionContent = '';
+                    switch (section.id) {
+                        case 'itinerario':
+                            sectionContent = `
+                                <div class="space-y-8">
+                                    ${travelData.content.itinerario.days.map(day => `
+                                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                                            <div class="p-6">
+                                                <div class="flex justify-between items-start mb-2">
+                                                    <h3 class="text-2xl font-bold text-slate-800">${day.title}</h3>
+                                                    <span class="text-sm font-semibold text-amber-600 bg-amber-100 px-3 py-1 rounded-full">${day.day}</span>
+                                                </div>
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2 text-center">
+                                                    <div class="bg-slate-50 p-3 rounded-md"><span class="font-bold">Distanza:</span> ${day.distance}</div>
+                                                    <div class="bg-slate-50 p-3 rounded-md"><span class="font-bold">Tempo:</span> ${day.time}</div>
+                                                </div>
+                                                <div class="space-y-3">
+                                                    <div><h4 class="font-semibold text-slate-700">Percorso:</h4><p class="text-slate-600">${day.route}</p></div>
+                                                    <div><h4 class="font-semibold text-slate-700">Caratteristiche:</h4><p class="text-slate-600">${day.features}</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                            break;
+                        case 'cibo':
+                             const ebro = travelData.content.cibo.ebro;
+                             const barcelona = travelData.content.cibo.barcelona;
+                             sectionContent = `
+                                <div class="space-y-12">
+                                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                                        <h3 class="text-3xl font-bold text-slate-800 mb-6">${ebro.title}</h3>
+                                        <h4 class="text-xl font-bold text-slate-700 mb-4">Prodotti Locali</h4>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                                            ${ebro.products.map(item => `
+                                                <div class="bg-slate-50 p-4 rounded-lg shadow-sm text-center">
+                                                    <h5 class="font-semibold text-slate-700">${item.name}</h5>
+                                                    <p class="text-sm text-slate-500 mt-1">${item.description}</p>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                        <h4 class="text-xl font-bold text-slate-700 mb-4">Piatti Tradizionali</h4>
+                                        <div class="space-y-6">
+                                            ${ebro.dishes.map(item => `
+                                                <div class="p-4 rounded-lg border border-gray-200">
+                                                    <h5 class="font-bold text-slate-800">${item.name}</h5>
+                                                    <p class="mt-1 text-slate-600">${item.description}</p>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                                        <h3 class="text-3xl font-bold text-slate-800 mb-6">${barcelona.title}</h3>
+                                         <h4 class="text-xl font-bold text-slate-700 mb-4">Prodotti Locali</h4>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                                            ${barcelona.products.map(item => `
+                                                <div class="bg-slate-50 p-4 rounded-lg shadow-sm text-center">
+                                                    <h5 class="font-semibold text-slate-700">${item.name}</h5>
+                                                    <p class="text-sm text-slate-500 mt-1">${item.description}</p>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                        <h4 class="text-xl font-bold text-slate-700 mb-4">Piatti Tradizionali</h4>
+                                        <div class="space-y-6">
+                                            ${barcelona.dishes.map(item => `
+                                                <div class="p-4 rounded-lg border border-gray-200">
+                                                    <h5 class="font-bold text-slate-800">${item.name}</h5>
+                                                    <p class="mt-1 text-slate-600">${item.description}</p>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            break;
+                        default:
+                            sectionContent = `
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    ${travelData.content[section.id].map(item => `
+                                        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
+                                            <div class="p-6">
+                                                ${item.city ? `<span class="text-xs font-bold ${item.city.includes('Tortosa') ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'} px-2 py-1 rounded-full mb-2 inline-block">${item.city}</span>` : ''}
+                                                <div class="uppercase tracking-wide text-sm text-amber-600 font-semibold">${item.classification}</div>
+                                                <h3 class="block mt-1 text-lg leading-tight font-bold text-slate-800">${item.name}</h3>
+                                                <p class="mt-2 text-slate-600">${item.description}</p>
+                                                ${item.address ? `<p class="mt-3 text-xs text-slate-500 flex items-center gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                                    ${item.address}</p>` : ''}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+                            break;
+                    }
+                    
+                    mainContent.innerHTML += `
+                        <section id="${section.id}" class="py-8">
+                            <div class="max-w-5xl mx-auto">
+                                <div class="flex items-center gap-4 mb-2">
+                                    <div class="text-3xl bg-amber-100 p-3 rounded-full">${section.icon}</div>
+                                    <h2 class="text-4xl font-bold text-slate-800">${section.title}</h2>
+                                </div>
+                                <p class="text-lg text-slate-600 mb-6">${section.intro}</p>
+                                ${sectionContent}
+                            </div>
+                        </section>
+                    `;
+                });
+            }
+
+            function handleScroll() {
+                const sections = document.querySelectorAll('section');
+                const navLinks = document.querySelectorAll('#main-nav a');
+                let currentSectionId = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 100) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('bg-slate-700', 'border-amber-400', 'text-white');
+                    link.classList.add('border-transparent');
+                    if (link.dataset.navId === currentSectionId) {
+                        link.classList.add('bg-slate-700', 'border-amber-400', 'text-white');
+                        link.classList.remove('border-transparent');
+                    }
+                });
+            }
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('-translate-x-full');
+                menuOpenIcon.classList.toggle('hidden');
+                menuCloseIcon.classList.toggle('hidden');
+            }
+
+            render();
+            window.addEventListener('scroll', handleScroll);
+            menuToggle.addEventListener('click', toggleSidebar);
+            
+            document.querySelectorAll('#main-nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768) {
+                       toggleSidebar();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

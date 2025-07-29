@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografica di Viaggio: Lorca > Tortosa > Barcellona</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F7F9FB;
+        }
+        .nav-link.active {
+            color: #FF6B6B;
+            font-weight: 700;
+        }
+        section p {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4">
+            <ul id="main-nav" class="flex items-center justify-center space-x-4 sm:space-x-8 overflow-x-auto whitespace-nowrap py-3">
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="text-center py-20 sm:py-28 bg-white">
+            <div class="container mx-auto px-4">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-[#073B4C]">VA - T3: Il Viaggio</h1>
+                <p class="mt-4 text-xl md:text-2xl font-bold text-[#118AB2]">Da Lorca a Barcellona</p>
+                <p class="mt-2 max-w-2xl mx-auto text-slate-500">Un'infografica interattiva per esplorare il percorso verso la Catalogna, con focus sulla storica Tortosa e la vibrante Barcellona.</p>
+            </div>
+        </section>
+
+        <div id="content-sections" class="container mx-auto px-4 py-16 space-y-24">
+        </div>
+    </main>
+
+    <footer class="bg-[#073B4C] text-white py-8">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p>Infografica basata sul documento di viaggio.</p>
+            <p class="mt-1 text-slate-400">&copy; 2025 - Tutti i diritti riservati.</p>
+        </div>
+    </footer>
+
+    <script>
+        const travelData = {
+            sections: [
+                { id: 'itinerario', title: 'Itinerario', icon: '👣' },
+                { id: 'spirituale', title: 'Spiritualità', icon: '🛐' },
+                { id: 'storico', title: 'Storia', icon: '📚' },
+                { id: 'avventura', title: 'Avventura', icon: '🪃' },
+                { id: 'leggende', title: 'Leggende', icon: '🔮' },
+                { id: 'cibo', title: 'Gastronomia', icon: '🍴' },
+            ],
+            content: {
+                itinerario: {
+                    intro: "Il viaggio si sviluppa in due giorni, risalendo la costa mediterranea. La prima tappa ti porta da Lorca alla storica città di Tortosa, alle porte del Delta dell'Ebro. La seconda tappa è un balzo nel cuore pulsante della Catalogna, fino a raggiungere la metropoli di Barcellona.",
+                    days: [
+                        { day: 'Giorno 9', title: 'Lorca → Tortosa', distance: '490', time: 5, route: "Il viaggio si snoda verso nord-est, risalendo la costa mediterranea lungo l'autostrada AP-7. Lascerai la Murcia per attraversare la Comunità Valenciana ed entrare in Catalogna, nel paesaggio fluviale delle Terres de l'Ebre.", features: "Un viaggio di ritorno verso il mare. Le aride pianure lasciano il posto ai rigogliosi agrumeti e alle vaste risaie del Delta dell'Ebro." },
+                        { day: 'Giorno 10', title: 'Tortosa → Barcellona', distance: '180', time: 2, route: "Un comodo percorso sull'autostrada AP-7 verso nord. Il tragitto passa vicino a Tarragona e Sitges, prima che l'orizzonte inizi a essere dominato dalla silhouette inconfondibile di Barcellona.", features: "I campi coltivati lasciano spazio a una costa sempre più urbanizzata. Il traffico si intensifica, chiaro segnale che stai per entrare in una delle città più vibranti d'Europa." }
+                    ]
+                },
+                spirituale: {
+                    intro: "Un viaggio nella fede che tocca la storica sede vescovile di Tortosa e la Barcellona di Gaudí. Le card con bordo verde si riferiscono a Tortosa, quelle con bordo blu a Barcellona.",
+                    points: [
+                        { name: "Tortosa: Cattedrale di Santa Maria", classification: "Spirituale e Storico", description: "Un magnifico palinsesto di stili, dal gotico catalano del suo interno alla sorprendente facciata barocca.", city: "tortosa" },
+                        { name: "Barcellona: Basilica della Sagrada Família", classification: "Spirituale e Architettonico", description: "Più che una chiesa, è un sogno di pietra, l'opera visionaria di Gaudí e simbolo universale di Barcellona.", city: "barcellona" }
+                    ]
+                },
+                storico: {
+                    intro: "Immergiti nella storia di due città plasmate da secoli di conquiste e culture. Le card con bordo verde si riferiscono a Tortosa, quelle con bordo blu a Barcellona.",
+                    points: [
+                         { name: "Tortosa: Castello della Suda", classification: "Storico e Militare", description: "La sentinella di Tortosa. Un'imponente fortezza di origine romana e araba che domina la città e il fiume Ebro.", city: "tortosa" },
+                         { name: "Barcellona: Casa Batlló", classification: "Architettonico e Culturale", description: "Uno dei capolavori più emblematici di Gaudí, un'esplosione di creatività la cui facciata è un'allegoria della leggenda di Sant Jordi e il drago.", city: "barcellona" },
+                         { name: "Barcellona: Barri Gòtic", classification: "Storico e Culturale", description: "Il cuore politico e storico della città. Un labirinto di stradine dove convivono rovine romane, palazzi medievali e negozi moderni.", city: "barcellona" }
+                    ]
+                },
+                avventura: {
+                    intro: "Anche in un viaggio tra città storiche c'è spazio per l'avventura. Esplora uno degli habitat naturali più importanti del Mediterraneo, un paradiso per gli amanti della natura e del birdwatching.",
+                    points: [
+                        { name: "Parco Naturale del Delta dell'Ebro", classification: "Avventura Naturalistica", description: "Un paesaggio piatto e immenso, formato da lagune, dune di sabbia e infinite risaie. È il luogo ideale per il birdwatching, con centinaia di specie, inclusi i fenicotteri rosa." }
+                    ]
+                },
+                leggende: {
+                    intro: "Scopri le leggende che animano queste terre. Le card con bordo verde si riferiscono a Tortosa, quelle con bordo blu a Barcellona.",
+                    points: [
+                        { name: "Tortosa: La Leggenda della Cucafera", classification: "Leggenda Popolare", description: "La storia di una creatura mostruosa che viveva nel fiume Ebro, oggi una delle figure più amate delle feste cittadine.", city: "tortosa" },
+                        { name: "La Battaglia dell'Ebro e i Fantasmi", classification: "Memoria Storica", description: "Più che una leggenda, una memoria. Si dice che vicino alle trincee della Guerra Civile si possano ancora sentire gli echi della battaglia.", city: "tortosa" },
+                        { name: "La Leggenda di Sant Jordi e il Drago", classification: "Leggenda Popolare", description: "La storia del cavaliere che salvò una principessa da un drago, dal cui sangue nacque un roseto. Simbolo della cultura catalana.", city: "barcellona" },
+                        { name: "La Leggenda della Fondazione di Barcellona", classification: "Mito di Fondazione", description: "Due miti si contendono la nascita della città: l'eroe greco Ercole o il generale cartaginese Amilcare Barca, padre di Annibale.", city: "barcellona" }
+                    ]
+                },
+                cibo: {
+                    intro: "Un viaggio gastronomico che unisce due cucine catalane distinte ma ugualmente deliziose: quella delle Terres de l'Ebre, basata su riso e prodotti del delta, e quella cosmopolita di Barcellona, tra tradizione e avanguardia.",
+                    ebro: {
+                        title: "Gastronomia (Ebro)",
+                        items: [
+                            { name: "Riso del Delta", description: "Il prodotto re della zona, con DOP." },
+                            { name: "Molluschi del Delta", description: "Cozze e ostriche dal sapore intenso." },
+                            { name: "Anguilla del Delta", description: "Una prelibatezza locale, in umido o affumicata." },
+                            { name: "Pastissets", description: "Dolcetti a mezzaluna ripieni." }
+                        ]
+                    },
+                    barcelona: {
+                        title: "Gastronomia (Catalogna/Barcellona)",
+                        items: [
+                            { name: "Botifarra", description: "La salsiccia catalana per eccellenza." },
+                            { name: "Cava", description: "Lo spumante prodotto con metodo classico." },
+                            { name: "Pa amb Tomàquet", description: "Più che una ricetta, un'istituzione." },
+                            { name: "Crema Catalana", description: "Il dessert con zucchero caramellato." }
+                        ]
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainNav = document.getElementById('main-nav');
+            const contentSections = document.getElementById('content-sections');
+
+            function render() {
+                // Add Home link
+                mainNav.innerHTML += `
+                    <li>
+                        <a href="porompompom.html" class="nav-link text-sm sm:text-base font-bold text-[#118AB2] hover:text-[#FF6B6B] transition-colors duration-200 py-2" title="Home">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </a>
+                    </li>
+                `;
+                
+                travelData.sections.forEach(section => {
+                    mainNav.innerHTML += `
+                        <li><a href="#${section.id}" data-nav-id="${section.id}" class="nav-link text-sm sm:text-base font-bold text-[#118AB2] hover:text-[#FF6B6B] transition-colors duration-200 py-2">${section.title.toUpperCase()}</a></li>
+                    `;
+
+                    const data = travelData.content[section.id];
+                    let sectionHTML = `
+                        <section id="${section.id}" class="scroll-mt-20">
+                            <div class="text-center mb-12">
+                                <span class="text-4xl">${section.icon}</span>
+                                <h2 class="mt-2 text-3xl md:text-4xl font-extrabold text-[#073B4C]">${section.title}</h2>
+                                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">${data.intro}</p>
+                            </div>
+                    `;
+
+                    if (section.id === 'itinerario') {
+                        sectionHTML += `<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">`;
+                        data.days.map(day => {
+                            sectionHTML += `
+                                <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-[#FFD166]">
+                                    <h3 class="text-2xl font-bold text-[#073B4C]">${day.title}</h3>
+                                    <p class="text-sm font-semibold text-slate-500 mb-4">${day.day}</p>
+                                    <div class="flex items-baseline space-x-4 my-4">
+                                        <div class="text-center">
+                                            <p class="text-4xl font-extrabold text-[#118AB2]">${day.distance}</p>
+                                            <p class="text-sm font-bold text-slate-500">KM</p>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-4xl font-extrabold text-[#118AB2]">${day.time}</p>
+                                            <p class="text-sm font-bold text-slate-500">ORE (circa)</p>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3 text-sm">
+                                        <div><h4 class="font-bold">Percorso:</h4><p>${day.route}</p></div>
+                                        <div><h4 class="font-bold">Caratteristiche:</h4><p>${day.features}</p></div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                        sectionHTML += `</div>`;
+                    } else if (section.id === 'cibo') {
+                        sectionHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-8">`;
+                        // Ebro Food
+                        sectionHTML += `<div><h3 class="text-2xl font-bold text-center text-[#073B4C] mb-6">${data.ebro.title}</h3><div class="grid grid-cols-2 gap-4">
+                            ${data.ebro.items.map(item => `
+                                <div class="bg-white rounded-lg shadow-md p-4 text-center transform hover:scale-105 transition-transform duration-200">
+                                    <h4 class="font-bold text-[#118AB2]">${item.name}</h4>
+                                    <p class="text-sm text-slate-500 mt-1">${item.description}</p>
+                                </div>`).join('')}
+                        </div></div>`;
+                        // Barcelona Food
+                        sectionHTML += `<div><h3 class="text-2xl font-bold text-center text-[#073B4C] mb-6">${data.barcelona.title}</h3><div class="grid grid-cols-2 gap-4">
+                            ${data.barcelona.items.map(item => `
+                                <div class="bg-white rounded-lg shadow-md p-4 text-center transform hover:scale-105 transition-transform duration-200">
+                                    <h4 class="font-bold text-[#118AB2]">${item.name}</h4>
+                                    <p class="text-sm text-slate-500 mt-1">${item.description}</p>
+                                </div>`).join('')}
+                        </div></div>`;
+                        sectionHTML += `</div>`;
+                    } else {
+                        sectionHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">`;
+                        data.points.forEach(item => {
+                            let borderColor = '#06D6A0'; // Default Green for Tortosa
+                            if (item.city === 'barcellona') {
+                                borderColor = '#118AB2'; // Blue for Barcelona
+                            }
+                            sectionHTML += `
+                                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4" style="border-color: ${borderColor};">
+                                    <p class="text-sm font-bold text-[#FF6B6B] uppercase">${item.classification}</p>
+                                    <h3 class="text-xl font-bold text-[#073B4C] mt-1">${item.name}</h3>
+                                    <p class="mt-2 text-slate-600">${item.description}</p>
+                                </div>
+                            `;
+                        });
+                        sectionHTML += `</div>`;
+                    }
+                    sectionHTML += '</section>';
+                    contentSections.innerHTML += sectionHTML;
+                });
+            }
+
+            function handleScroll() {
+                const sections = document.querySelectorAll('#content-sections section');
+                const navLinks = document.querySelectorAll('.nav-link');
+                let currentSectionId = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 100) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            render();
+            window.addEventListener('scroll', handleScroll);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografica di Viaggio: Milano > Roses > Cadaqués</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Energetic & Playful -->
+    <!-- Application Structure Plan: Ho progettato l'infografica come una singola pagina a scorrimento verticale (scrollytelling). Una barra di navigazione superiore fissa permette di saltare tra lezioni tematiche (Itinerario, Storia, Cibo, ecc.), che fungono da capitoli della narrazione. Questa struttura è ideale per un'infografica perché guida l'utente attraverso una storia lineare, ma offre anche la libertà di esplorare argomenti specifici. L'interattività è concentrata sulla visualizzazione dei dati (grafico dei dislivelli) per rendere i numeri più digeribili. -->
+    <!-- Visualization & Content Choices: Dati Itinerario -> Goal: Inform/Compare -> Viz: Card + 'Big Number' + Grafico a Barre -> Interaction: Tooltip su hover -> Justification: Le card e i numeri in grande evidenziano le informazioni chiave, mentre il grafico a barre è il modo più efficace per confrontare i dati numerici del dislivello del trekking. Punti di Interesse/Leggende/Cibo -> Goal: Organize -> Viz: Griglia di Card -> Interaction: Effetto hover -> Justification: Le card sono perfette per raggruppare e presentare blocchi di testo e dati in modo coerente e visivamente separato. Libreria: Chart.js (Canvas). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F7F9FB;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .nav-link.active {
+            color: #FF6B6B;
+            font-weight: 700;
+        }
+                  /* Giustifica il testo di tutti i paragrafi nelle sezioni */
+    section p {
+        text-align: justify;
+    }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4">
+            <ul id="main-nav" class="flex items-center justify-center space-x-4 sm:space-x-8 overflow-x-auto whitespace-nowrap py-3">
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="text-center py-20 sm:py-28 bg-white">
+            <div class="container mx-auto px-4">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-[#073B4C]">VA - T1: Il Viaggio</h1>
+                <p class="mt-4 text-xl md:text-2xl font-bold text-[#118AB2]">Da Milano a Cadaqués</p>
+                <p class="mt-2 max-w-2xl mx-auto text-slate-500">Un'infografica interattiva per esplorare l'itinerario, la storia, le leggende e i sapori della Costa Brava.</p>
+            </div>
+        </section>
+
+        <div id="content-sections" class="container mx-auto px-4 py-16 space-y-24">
+        </div>
+    </main>
+
+    <footer class="bg-[#073B4C] text-white py-8">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p>Infografica basata sul documento di viaggio.</p>
+            <p class="mt-1 text-slate-400">&copy; 2025 - Tutti i diritti riservati.</p>
+        </div>
+    </footer>
+
+    <script>
+        const travelData = {
+            sections: [
+                { id: 'itinerario', title: 'Itinerario', icon: '👣' },
+                { id: 'spirituale', title: 'Spiritualità', icon: '🛐' },
+                { id: 'storico', title: 'Storia', icon: '📚' },
+                { id: 'avventura', title: 'Avventura', icon: '🪃' },
+                { id: 'leggende', title: 'Leggende', icon: '🔮' },
+                { id: 'cibo', title: 'Gastronomia', icon: '🍴' },
+            ],
+            content: {
+                itinerario: {
+                    intro: "Il viaggio inizia qui. Questa sezione traccia il percorso da Milano alla costa spagnola, evidenziando le distanze, i tempi e le caratteristiche di ogni tappa. Abbiamo anche visualizzato lo sforzo fisico richiesto per l'epico trekking opzionale da Roses a Cadaqués.",
+                    days: [
+                        { day: 'Giorno 1', title: 'Milano → Roses', distance: '900', time: 9, route: "Da Milano, l'autostrada A7 e poi la A10 ti guidano verso la Francia. Varcato il confine, la A8 e la AP-7 spagnola ti condurranno a Roses, con la costa ligure e la Costa Azzurra a farti compagnia.", features: "Panorami mozzafiato ti attendono, ma attenzione al traffico intenso durante l'alta stagione. E ricorda: poche soste per non irritare il conducente!" },
+                        { day: 'Giorno 2', title: 'Roses → Cadaqués', distance: '20', time: 0.66, route: "Una breve ma intensa deviazione sulla GI-614. La strada si snoda tra le colline del Cap de Creus, un paesaggio selvaggio di tornanti che ti porterà nel magico villaggio di Dalí.", features: "Questo non è un semplice trasferimento, ma un'immersione nell'anima della Costa Brava, dal turismo vivace di Roses alla quiete artistica di Cadaqués." }
+                    ],
+                    hike: {
+                        title: 'Trekking GR-92: Analisi del Dislivello',
+                        description: "Il trekking da Roses a Cadaqués è un'avventura vera e propria. Il grafico sottostante mostra il dislivello positivo (salita) e negativo (discesa) per ogni tappa, dandoti un'idea chiara dell'impegno richiesto.",
+                        stages: [
+                            { title: 'Tappa 1: Punta Falconera', p: 250, n: -50 },
+                            { title: 'Tappa 2: Pont del Barral', p: 400, n: -550 },
+                            { title: 'Tappa 3: Arrivo a Cadaqués', p: 50, n: -150 }
+                        ]
+                    }
+                },
+                spirituale: {
+                    intro: "Un viaggio nella fede e nella paura. La storia spirituale di questa costa è una lotta continua tra la costruzione di magnifici monasteri e la difesa dalle incursioni dei pirati. Ogni sito è un simbolo di resilienza.",
+                    points: [
+                        { name: "Església de Santa Maria", classification: "Spirituale", description: "L'attuale chiesa neoclassica di Roses è l'erede spirituale dell'antico monastero benedettino, un faro di fede per la comunità." },
+                        { name: "Cappella della Trinità", classification: "Spirituale e Storico", description: "Dove oggi sorge una fortezza, un tempo c'era una cappella. La sua demolizione per ordine di Carlo V segna il passaggio dalla devozione alla difesa militare." },
+                        { name: "Ermita de Sant Baldiri", classification: "Spirituale", description: "Finanziata con i proventi della pesca, questa piccola e affascinante ermita a Cadaqués è un monumento alla devozione popolare dei suoi abitanti." },
+                    ]
+                },
+                storico: {
+                    intro: "Un'archeologia a cielo aperto. Percorrere questa costa significa viaggiare attraverso 25 secoli di storia, dalle tombe preistoriche alle fortezze rinascimentali, fino al surreale mondo di Salvador Dalí.",
+                    points: [
+                         { name: "Ciutadella de Roses", classification: "Militare e Archeologico", description: "Una fortezza rinascimentale che protegge un tesoro: i resti di una colonia greca, una villa romana e un monastero medievale." },
+                         { name: "Dolmen de la Creu d'en Cobertella", classification: "Archeologico", description: "Il più grande monumento megalitico della Catalogna, una tomba preistorica che testimonia la complessità delle antiche comunità locali." },
+                         { name: "Castrum Visigòtic", classification: "Archeologico", description: "Sulla cima del Puig Rom, i resti di un insediamento fortificato visigoto del VII secolo offrono una vista strategica e un tuffo nel passato." },
+                         { name: "Casa-Museu Salvador Dalí", classification: "Artistico e Culturale", description: "Più che una casa, un'autobiografia tridimensionale. Il labirinto surreale dove il genio di Dalí ha preso forma, affacciato sulla baia di Portlligat." }
+                    ]
+                },
+                avventura: {
+                    intro: "Per chi non si accontenta di guardare. Questa sezione è dedicata all'esplorazione attiva, dove la sfida fisica del trekking si unisce alla scoperta di paesaggi mozzafiato e angoli di natura incontaminata.",
+                    points: [
+                        { name: "Trekking GR-92: Roses-Cadaqués", classification: "Avventura Escursionistica", description: "L'avventura principale: un trekking costiero di circa 22 km attraverso il terreno roccioso e selvaggio del Parco Naturale del Cap de Creus. Una sfida ripagata da panorami unici." },
+                        { name: "Escursione al Faro di Cap de Creus", classification: "Avventura Paesaggistica", description: "Un pellegrinaggio laico ai confini della terra. Un sentiero di 7 km da Cadaqués ti porta nel punto più orientale della penisola iberica, in un paesaggio quasi lunare battuto dal vento." }
+                    ]
+                },
+                leggende: {
+                    intro: "Dove la realtà incontra il mito. L'Empordà è una terra di confine, popolata da storie di giganti, streghe, vampiri e pirati. Queste leggende sono l'anima profonda di un territorio forgiato dalla natura e dalla storia.",
+                    points: [
+                        { name: "Il Gigante Rotllà", classification: "Leggenda Toponomastica", description: "La rabbia di un gigante per un amore perduto diede origine all'isolotto di Es Cucurucuc, scagliato in mare da un calcio furibondo." },
+                        { name: "Le Streghe di Llers", classification: "Leggenda sulla Stregoneria", description: "Si dice che il vicino villaggio di Llers fosse il più grande covo di streghe della Catalogna, capaci di scatenare il vento Tramontana con i loro sortilegi." },
+                        { name: "Il Conte Estruc, Vampiro", classification: "Leggenda sui Vampiri", description: "Una delle più antiche storie di vampiri d'Europa. Il crudele conte Estruc tornò dalla tomba per perseguitare le notti dell'Empordà." },
+                        { name: "La Cattura di Cervantes", classification: "Aneddoto Storico", description: "Al largo di questa costa, nel 1575, l'autore del Don Chisciotte fu catturato dai pirati. Un'avventura che segnò la sua vita e la sua opera." }
+                    ]
+                },
+                cibo: {
+                    intro: "Il sapore del 'Mar i Muntanya'. La gastronomia locale è un dialogo tra i prodotti della terra e i tesori del mare. Questa sezione è un invito ad assaggiare l'essenza stessa di questo territorio unico.",
+                    items: [
+                        { name: "Anxoves de l'Escala", description: "Acciughe sotto sale, un'arte antica." },
+                        { name: "Botifarra Dolça", description: "Una salsiccia agrodolce unica al mondo." },
+                        { name: "Taps de Cadaqués", description: "Soffici dolcetti a forma di tappo di champagne." },
+                        { name: "Gamba de Roses", description: "Il prelibato gambero rosso locale." },
+                        { name: "Suquet de Peix", description: "Lo stufato dei pescatori, umile e saporito." },
+                        { name: "Arròs Negre", description: "Un risotto il cui colore nero viene dalla cipolla caramellata." },
+                        { name: "Mar i Muntanya", description: "Il piatto simbolo: pollo e scampi insieme." },
+                        { name: "Escalivada", description: "Verdure arrostite dal sapore affumicato." }
+                    ]
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainNav = document.getElementById('main-nav');
+            const contentSections = document.getElementById('content-sections');
+
+            function render() {
+                // Add Home link
+                mainNav.innerHTML += `
+                    <li>
+                        <a href="porompompom.html" class="nav-link text-sm sm:text-base font-bold text-[#118AB2] hover:text-[#FF6B6B] transition-colors duration-200 py-2" title="Home">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </a>
+                    </li>
+                `;
+                
+                travelData.sections.forEach(section => {
+                    mainNav.innerHTML += `
+                        <li><a href="#${section.id}" data-nav-id="${section.id}" class="nav-link text-sm sm:text-base font-bold text-[#118AB2] hover:text-[#FF6B6B] transition-colors duration-200 py-2">${section.title.toUpperCase()}</a></li>
+                    `;
+
+                    const data = travelData.content[section.id];
+                    let sectionHTML = `
+                        <section id="${section.id}" class="scroll-mt-20">
+                            <div class="text-center mb-12">
+                                <span class="text-4xl">${section.icon}</span>
+                                <h2 class="mt-2 text-3xl md:text-4xl font-extrabold text-[#073B4C]">${section.title}</h2>
+                                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">${data.intro}</p>
+                            </div>
+                    `;
+
+                    if (section.id === 'itinerario') {
+                        sectionHTML += `
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                                ${data.days.map(day => `
+                                    <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-[#FFD166]">
+                                        <h3 class="text-2xl font-bold text-[#073B4C]">${day.title}</h3>
+                                        <div class="flex items-baseline space-x-4 my-4">
+                                            <div class="text-center">
+                                                <p class="text-4xl font-extrabold text-[#118AB2]">${day.distance}</p>
+                                                <p class="text-sm font-bold text-slate-500">KM</p>
+                                            </div>
+                                            <div class="text-center">
+                                                <p class="text-4xl font-extrabold text-[#118AB2]">${Math.round(day.time * 60)}</p>
+                                                <p class="text-sm font-bold text-slate-500">MINUTI</p>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-3 text-sm">
+                                            <div><h4 class="font-bold">Percorso:</h4><p>${day.route}</p></div>
+                                            <div><h4 class="font-bold">Caratteristiche:</h4><p>${day.features}</p></div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-2xl font-bold text-center text-[#073B4C]">${data.hike.title}</h3>
+                                <p class="text-center max-w-2xl mx-auto mt-2 mb-8 text-slate-600">${data.hike.description}</p>
+                                <div class="chart-container">
+                                    <canvas id="hikeChart"></canvas>
+                                </div>
+                            </div>
+                        `;
+                    } else if (section.id === 'cibo') {
+                        sectionHTML += `
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                                ${data.items.map(item => `
+                                    <div class="bg-white rounded-lg shadow-md p-4 text-center transform hover:scale-105 transition-transform duration-200">
+                                        <h4 class="font-bold text-[#118AB2]">${item.name}</h4>
+                                        <p class="text-sm text-slate-500 mt-1">${item.description}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    } else {
+                        sectionHTML += `
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                ${data.points.map(item => `
+                                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#06D6A0]">
+                                        <p class="text-sm font-bold text-[#FF6B6B] uppercase">${item.classification}</p>
+                                        <h3 class="text-xl font-bold text-[#073B4C] mt-1">${item.name}</h3>
+                                        <p class="mt-2 text-slate-600">${item.description}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    }
+                    sectionHTML += '</section>';
+                    contentSections.innerHTML += sectionHTML;
+                });
+                initChart();
+            }
+            
+            function initChart() {
+                const hikeData = travelData.content.itinerario.hike;
+                const ctx = document.getElementById('hikeChart')?.getContext('2d');
+                if (!ctx) return;
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: hikeData.stages.map(s => s.title),
+                        datasets: [
+                            {
+                                label: 'Salita (m)',
+                                data: hikeData.stages.map(s => s.p),
+                                backgroundColor: '#06D6A0',
+                                borderRadius: 4,
+                            },
+                            {
+                                label: 'Discesa (m)',
+                                data: hikeData.stages.map(s => s.n),
+                                backgroundColor: '#FF6B6B',
+                                borderRadius: 4,
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(tooltipItems) {
+                                        const item = tooltipItems[0];
+                                        let label = item.chart.data.labels[item.dataIndex];
+                                        if (Array.isArray(label)) { return label.join(' '); }
+                                        return label;
+                                    },
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${Math.abs(context.parsed.y)}m`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: { grid: { drawBorder: false }, ticks: { callback: value => `${value}m` } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            function handleScroll() {
+                const sections = document.querySelectorAll('#content-sections section');
+                const navLinks = document.querySelectorAll('.nav-link');
+                let currentSectionId = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 100) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            render();
+            window.addEventListener('scroll', handleScroll);
+        });
+    </script>
+</body>
+</html>
